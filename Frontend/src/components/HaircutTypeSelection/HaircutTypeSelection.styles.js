@@ -2,14 +2,14 @@ import styled from 'styled-components';
 
 export const HaircutTypeContainer = styled.div`
   text-align: center;
-  padding: 40px 20px;
+  padding: 0px 20px;
 `;
 
 export const HaircutTypeTitle = styled.h2`
   font-size: 28px;
   font-weight: 700;
   color: #1a1a1a;
-  margin-bottom: 10px;
+  margin-bottom: 40px;
   
   @media (max-width: 768px) {
     font-size: 24px;

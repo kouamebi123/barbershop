@@ -90,9 +90,9 @@ export const LOCATION_CONTACT = {
   subtitle: 'Des questions sur nos salons ?',
   description: 'N\'hésitez pas à nous contacter pour toute question concernant nos salons, leurs services ou leurs horaires.',
   contactInfo: {
-    phone: 'Votre numéro',
+    phone: '06 12 34 56 78',
     email: 'contact@barbershop.fr',
-    address: 'Votre ville'
+    address: 'Rennes'
   }
 };
 

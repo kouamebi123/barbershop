@@ -32,10 +32,6 @@ const HaircutTypeSelection = ({
   return (
     <HaircutTypeContainer>
       <HaircutTypeTitle>Choisissez votre type de coupe</HaircutTypeTitle>
-      <HaircutTypeSubtitle>
-        Sélectionnez le type de service qui vous intéresse
-      </HaircutTypeSubtitle>
-      
       <HaircutTypeGrid>
         {haircutTypes.map((type) => (
           <motion.div

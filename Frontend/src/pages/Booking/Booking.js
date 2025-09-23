@@ -322,8 +322,8 @@ const Booking = () => {
 
   const getStepTitle = () => {
     const titles = {
-      1: 'Choisissez votre genre',
-      2: 'Sélectionnez votre type de coupe',
+      1: '',
+      2: '',
       3: 'Choisissez votre service',
       4: 'Sélectionnez votre salon',
       5: 'Sélectionnez la date et l\'heure',
@@ -356,7 +356,6 @@ const Booking = () => {
       case 3:
         return (
           <div>
-            <h3>Choisissez votre service</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px', marginTop: '20px' }}>
               {services.map((service) => (
                 <ServiceCard
@@ -379,7 +378,6 @@ const Booking = () => {
       case 4:
         return (
           <div>
-            <h3>Sélectionnez votre salon</h3>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '20px', marginTop: '20px' }}>
               {locations.map((location) => (
                 <LocationCard
@@ -405,7 +403,6 @@ const Booking = () => {
       case 5:
         return (
           <div>
-            <h3>Sélectionnez la date et l'heure</h3>
             <FormGroup>
               <Label htmlFor="appointmentDate">Date</Label>
               <Input
@@ -516,7 +513,10 @@ const Booking = () => {
       case 7:
         return (
           <div>
-            <h3>Confirmation de votre réservation</h3>
+            <h3>Récapitulatif de votre réservation</h3>
+            <p style={{ marginBottom: '20px', color: '#666', fontSize: '16px' }}>
+              Veuillez vérifier les informations ci-dessous avant de confirmer votre réservation.
+            </p>
             <SummaryCard>
               <SummaryItem>
                 <strong>Service:</strong> {selectedService?.name}
@@ -650,7 +650,8 @@ const Booking = () => {
                 </Button>
               ) : (
                 <Button
-                  type="submit"
+                  type="button"
+                  onClick={handleSubmit}
                   disabled={!canProceedToNext() || loading || isBookingConfirmed}
                 >
                   {loading ? <FaSpinner className="spinner" /> : <FaCheck />} 

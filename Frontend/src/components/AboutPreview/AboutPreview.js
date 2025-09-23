@@ -47,9 +47,9 @@ const AboutPreview = () => {
               viewport={{ once: true }}
             >
               <Title>À propos de nous</Title>
-              <Subtitle>L'excellence de la coiffure masculine</Subtitle>
+              <Subtitle>L'excellence de la coiffure</Subtitle>
               <Description>
-                Depuis plusieurs années, notre barbershop s'impose comme la référence de la coiffure masculine. 
+                Depuis plusieurs années, notre barbershop s'impose comme la référence de la coiffure. 
                 Notre équipe de maîtres barbiers passionnés vous offre une expérience 
                 unique alliant tradition et modernité.
               </Description>

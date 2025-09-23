@@ -10,8 +10,13 @@ export const NavbarContainer = styled.nav`
   z-index: 1000;
   background: ${props => props.isScrolled ? 'rgba(26, 26, 26, 0.95)' : 'rgba(26, 26, 26, 0.9)'};
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   border-bottom: ${props => props.isScrolled ? '1px solid rgba(212, 175, 55, 0.3)' : 'none'};
+  min-height: ${props => props.isExtending ? '120px' : '80px'};
+  
+  @media (max-width: 768px) {
+    min-height: ${props => props.isExtending ? '100px' : '70px'};
+  }
 `;
 
 export const NavbarWrapper = styled.div`
@@ -21,11 +26,12 @@ export const NavbarWrapper = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 80px;
+  height: ${props => props.isExtending ? '120px' : '80px'};
+  transition: height 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   
   @media (max-width: 768px) {
     padding: 0 15px;
-    height: 70px;
+    height: ${props => props.isExtending ? '100px' : '70px'};
   }
 `;
 

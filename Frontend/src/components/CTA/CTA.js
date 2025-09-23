@@ -33,7 +33,7 @@ const CTA = () => {
               <Title>Prêt pour votre prochaine coupe ?</Title>
               <Subtitle>Réservez votre créneau en quelques clics</Subtitle>
               <Description>
-                Découvrez l'excellence de la coiffure masculine avec notre équipe de professionnels. 
+                Découvrez l'excellence de la coiffure avec notre équipe de professionnels. 
                 Réservation simple, service premium, résultat garanti.
               </Description>
               
@@ -52,7 +52,7 @@ const CTA = () => {
               <ContactInfo>
                 <ContactItem>
                   <FaPhone />
-                  <span>Votre numéro</span>
+                  <span>06 12 34 56 78</span>
                 </ContactItem>
                 <ContactItem>
                   <FaCalendarAlt />

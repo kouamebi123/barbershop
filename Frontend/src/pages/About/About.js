@@ -101,8 +101,8 @@ const About = () => {
               <AboutText>
                 <p>
                   Fondé en 2018, notre barbershop est né de la passion de ses créateurs pour l'art traditionnel 
-                  de la coiffure masculine. Notre vision était simple : créer un espace où les hommes peuvent 
-                  se détendre, prendre soin d'eux et repartir avec un style qui leur correspond parfaitement.
+                  de la coiffure. Notre vision était simple : créer un espace où chacun peut 
+                  se détendre, prendre soin de soi et repartir avec un style qui lui correspond parfaitement.
                 </p>
                 <p>
                   Aujourd'hui, avec plusieurs salons et une équipe de coiffeurs professionnels, 

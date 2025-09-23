@@ -19,7 +19,7 @@ const GenderSelection = ({ onGenderSelect, selectedGender }) => {
       id: 'homme',
       name: 'Homme',
       icon: <FaMale />,
-      description: 'Coupes, tailles de barbe et soins pour hommes',
+      description: 'Coupes, tailles de barbe et soins spécialisés',
       color: '#3B82F6'
     },
     {
@@ -33,11 +33,6 @@ const GenderSelection = ({ onGenderSelect, selectedGender }) => {
 
   return (
     <GenderContainer>
-      <GenderTitle>Choisissez votre genre</GenderTitle>
-      <GenderSubtitle>
-        Sélectionnez votre genre pour voir les services adaptés
-      </GenderSubtitle>
-      
       <GenderGrid>
         {genders.map((gender) => (
           <motion.div
@@ -45,13 +40,21 @@ const GenderSelection = ({ onGenderSelect, selectedGender }) => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.3 }}
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
+            style={{ 
+              '--motion-scale': gender.id === 'homme' ? '1.02' : '1.02'
+            }}
           >
             <GenderCard
               onClick={() => onGenderSelect(gender.id)}
               $isSelected={selectedGender === gender.id}
               $color={gender.color}
+              className={`gender-card-${gender.id}`}
+              style={{ 
+                '--gender-color': gender.color,
+                '--gender-hover-color': gender.color 
+              }}
             >
               <GenderIcon $color={gender.color}>
                 {gender.icon}

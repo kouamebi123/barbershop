@@ -5,10 +5,21 @@ export const HeroContainer = styled.section`
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  background: 
+    linear-gradient(135deg, rgba(26, 26, 26, 0.8) 0%, rgba(45, 45, 45, 0.8) 100%),
+    url('/image.jpg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   color: white;
   position: relative;
   overflow: hidden;
+  padding-top: ${props => props.navbarExtended ? '120px' : '80px'};
+  transition: padding-top 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  
+  @media (max-width: 768px) {
+    padding-top: ${props => props.navbarExtended ? '100px' : '70px'};
+  }
   
   &::before {
     content: '';
@@ -32,6 +43,8 @@ export const HeroContent = styled.div`
   align-items: center;
   position: relative;
   z-index: 2;
+  margin-top: -80px;
+ 
   
   @media (max-width: 992px) {
     grid-template-columns: 1fr;
@@ -49,6 +62,8 @@ export const HeroText = styled.div`
   display: flex;
   flex-direction: column;
   gap: 2rem;
+  position: relative;
+  z-index: 2;
 `;
 
 export const HeroTitle = styled.h1`
@@ -207,12 +222,13 @@ export const HeroImage = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  z-index: 2;
   
   .hero-image-placeholder {
     width: 100%;
     max-width: 500px;
     height: 600px;
-    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    background: linear-gradient(135deg, rgba(45, 45, 45, 0.53) 0%, rgba(26, 26, 26, 0.58) 100%);
     border-radius: 20px;
     display: flex;
     align-items: center;
@@ -220,6 +236,17 @@ export const HeroImage = styled.div`
     position: relative;
     overflow: hidden;
     box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+    
+    video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+      z-index: 1;
+    }
     
     &::before {
       content: '';
@@ -240,8 +267,9 @@ export const HeroImage = styled.div`
   
   .image-content {
     text-align: center;
-    z-index: 2;
+    z-index: 3;
     position: relative;
+    padding: 2rem;
     
     h3 {
       font-family: 'Playfair Display', serif;
@@ -249,6 +277,7 @@ export const HeroImage = styled.div`
       font-weight: 700;
       color: #d4af37;
       margin-bottom: 1rem;
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.34), -1px -1px 2px rgba(0, 0, 0, 0.29);
     }
     
     p {
@@ -256,6 +285,7 @@ export const HeroImage = styled.div`
       color: #ccc;
       text-transform: uppercase;
       letter-spacing: 2px;
+      text-shadow: 1px 1px 1px rgba(0, 0, 0, 0.34), -1px -1px 2px rgba(0, 0, 0, 0.29);
     }
   }
   

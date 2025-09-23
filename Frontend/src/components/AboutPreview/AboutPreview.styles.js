@@ -172,6 +172,7 @@ export const ImageContent = styled.div`
     text-align: center;
     z-index: 2;
     position: relative;
+    padding: 2rem;
     
     h3 {
       font-family: 'Playfair Display', serif;

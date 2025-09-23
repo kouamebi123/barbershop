@@ -8,7 +8,7 @@ export const CONTACT_HERO = {
 export const CONTACT_INFO = {
   phone: {
     title: 'Téléphone',
-    value: 'Votre numéro',
+    value: '06 12 34 56 78',
     icon: 'FaPhone',
     description: 'Appelez-nous pour toute question ou réservation'
   },
@@ -26,7 +26,7 @@ export const CONTACT_INFO = {
   },
   address: {
     title: 'Adresse',
-    value: 'Votre ville',
+    value: 'Rennes',
     icon: 'FaMapMarkerAlt',
     description: 'Retrouvez-nous dans nos différents salons'
   }

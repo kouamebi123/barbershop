@@ -98,7 +98,7 @@ export const CTA_SECTION = {
   primaryButton: 'Réserver maintenant',
   secondaryButton: 'Nos services',
   contactInfo: {
-    phone: 'Votre numéro',
+    phone: '06 12 34 56 78',
     hours: 'Ouvert 7j/7'
   }
 };

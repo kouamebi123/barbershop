@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { FaSignOutAlt, FaUser, FaCog, FaHome, FaCalendarAlt, FaUsers, FaCut, FaMapMarkerAlt } from 'react-icons/fa';
+import { FaSignOutAlt } from 'react-icons/fa';
 import { useAuth } from '../../contexts/AuthContext';
 import {
   AdminNavbarContainer,
@@ -11,6 +11,7 @@ import {
   NavbarMenu,
   NavbarItem,
   NavbarLink,
+  NavbarTitle,
   NavbarActions,
   UserInfo,
   UserName,
@@ -47,41 +48,9 @@ const AdminNavbar = () => {
 
       <NavbarContent>
         <NavbarMenu>
-          <NavbarItem>
-            <NavbarLink as={Link} to="/admin/dashboard">
-              <FaHome />
-              <span>Dashboard</span>
-            </NavbarLink>
-          </NavbarItem>
-          
-          <NavbarItem>
-            <NavbarLink as={Link} to="/admin/bookings">
-              <FaCalendarAlt />
-              <span>Réservations</span>
-            </NavbarLink>
-          </NavbarItem>
-          
-          <NavbarItem>
-            <NavbarLink as={Link} to="/admin/customers">
-              <FaUsers />
-              <span>Clients</span>
-            </NavbarLink>
-          </NavbarItem>
-          
-          <NavbarItem>
-            <NavbarLink as={Link} to="/admin/services">
-              <FaCut />
-              <span>Services</span>
-            </NavbarLink>
-          </NavbarItem>
-          
-          <NavbarItem>
-            <NavbarLink as={Link} to="/admin/locations">
-              <FaMapMarkerAlt />
-              <span>Salons</span>
-            </NavbarLink>
-          </NavbarItem>
         </NavbarMenu>
+
+        <NavbarTitle>Tableau de Bord</NavbarTitle>
 
         <NavbarActions>
           <UserInfo>
@@ -102,41 +71,6 @@ const AdminNavbar = () => {
 
       {isMobileMenuOpen && (
         <MobileMenu>
-          <MobileMenuItem>
-            <NavbarLink as={Link} to="/admin/dashboard" onClick={toggleMobileMenu}>
-              <FaHome />
-              <span>Dashboard</span>
-            </NavbarLink>
-          </MobileMenuItem>
-          
-          <MobileMenuItem>
-            <NavbarLink as={Link} to="/admin/bookings" onClick={toggleMobileMenu}>
-              <FaCalendarAlt />
-              <span>Réservations</span>
-            </NavbarLink>
-          </MobileMenuItem>
-          
-          <MobileMenuItem>
-            <NavbarLink as={Link} to="/admin/customers" onClick={toggleMobileMenu}>
-              <FaUsers />
-              <span>Clients</span>
-            </NavbarLink>
-          </MobileMenuItem>
-          
-          <MobileMenuItem>
-            <NavbarLink as={Link} to="/admin/services" onClick={toggleMobileMenu}>
-              <FaCut />
-              <span>Services</span>
-            </NavbarLink>
-          </MobileMenuItem>
-          
-          <MobileMenuItem>
-            <NavbarLink as={Link} to="/admin/locations" onClick={toggleMobileMenu}>
-              <FaMapMarkerAlt />
-              <span>Salons</span>
-            </NavbarLink>
-          </MobileMenuItem>
-          
           <MobileMenuItem>
             <LogoutButton onClick={handleLogout}>
               <FaSignOutAlt />

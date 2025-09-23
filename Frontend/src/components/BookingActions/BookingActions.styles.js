@@ -89,25 +89,36 @@ export const StatusBadge = styled.span`
 `;
 
 export const ConfirmationModal = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 9999 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin: 0 !important;
+  padding: 0 !important;
 `;
 
 export const ModalOverlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: rgba(0, 0, 0, 0.15);
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
   padding: 20px;
+  backdrop-filter: blur(2px);
+  margin: 0 !important;
 `;
 
 export const ModalContent = styled.div`
@@ -150,6 +161,19 @@ export const ModalActions = styled.div`
   justify-content: flex-end;
   border-top: 1px solid #eee;
   margin-top: 20px;
+`;
+
+export const ModalConfirmButton = styled(ActionButton)`
+  background: #27ae60;
+  color: white;
+  border-color: #27ae60;
+  padding: 12px 24px;
+  font-weight: 600;
+  
+  &:hover:not(:disabled) {
+    background: #229954;
+    border-color: #229954;
+  }
 `;
 
 export const CancelReasonInput = styled.textarea`

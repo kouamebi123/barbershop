@@ -5,10 +5,10 @@ export const APP_CONFIG = {
   version: '1.0.0',
   author: 'Emmanuel Kouame',
   contact: {
-    phone: 'Votre numéro',
+    phone: '06 12 34 56 78',
     email: 'contact@barbershop.fr',
     reservationEmail: 'reservation@barbershop.fr',
-    address: 'Votre ville'
+    address: 'Rennes'
   }
 };
 

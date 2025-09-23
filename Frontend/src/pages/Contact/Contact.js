@@ -222,7 +222,7 @@ const Contact = () => {
                       <InfoText>
                         <strong>Salon Principal</strong><br />
                         12 Rue de la Barbe<br />
-                        Votre ville
+                        Rennes
                       </InfoText>
                     )}
                   </InfoCard>

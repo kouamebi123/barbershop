@@ -4,6 +4,7 @@ import { Helmet, HelmetProvider } from 'react-helmet-async';
 
 // Contexts
 import { AuthProvider } from './contexts/AuthContext';
+import { NavbarProvider } from './contexts/NavbarContext';
 
 // Components
 import Navbar from './components/Navbar/Navbar';
@@ -29,7 +30,8 @@ function App() {
   return (
     <HelmetProvider>
       <AuthProvider>
-        <AppContainer>
+        <NavbarProvider>
+          <AppContainer>
           <GlobalStyles />
           <Helmet>
             <title>Barbershop - Votre coiffeur de confiance</title>
@@ -92,6 +94,7 @@ function App() {
           } />
         </Routes>
         </AppContainer>
+        </NavbarProvider>
       </AuthProvider>
     </HelmetProvider>
   );

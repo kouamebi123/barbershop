@@ -109,7 +109,7 @@ const Footer = () => {
                 </FooterIcon>
                 <FooterText>
                   Adresse principale<br />
-                  Votre ville, France
+                  Rennes, France
                 </FooterText>
               </ContactItem>
               <ContactItem>

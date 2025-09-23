@@ -73,6 +73,22 @@ export const NavbarMenu = styled.div`
   }
 `;
 
+export const NavbarTitle = styled.h1`
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #d4af37;
+  margin: 0;
+  text-align: center;
+  flex: 1;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+
+  @media (max-width: 768px) {
+    font-size: 1.4rem;
+    letter-spacing: 1px;
+  }
+`;
+
 export const NavbarItem = styled.div`
   position: relative;
 `;

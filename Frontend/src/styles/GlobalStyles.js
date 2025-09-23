@@ -9,6 +9,8 @@ const GlobalStyles = createGlobalStyle`
 
   html {
     scroll-behavior: smooth;
+    overscroll-behavior-y: none;
+    -webkit-overflow-scrolling: touch;
   }
 
   body {
@@ -19,6 +21,9 @@ const GlobalStyles = createGlobalStyle`
     line-height: 1.6;
     color: #1a1a1a;
     background-color: #ffffff;
+    overscroll-behavior-y: none;
+    position: relative;
+    overflow-x: hidden;
   }
 
   code {

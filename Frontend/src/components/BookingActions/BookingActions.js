@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { createPortal } from 'react-dom';
 import { FaCheck, FaTimes, FaEye, FaEdit } from 'react-icons/fa';
 import { adminAPI } from '../../services/api';
 import { toast } from 'react-toastify';
@@ -16,6 +17,7 @@ import {
   ModalTitle,
   ModalBody,
   ModalActions,
+  ModalConfirmButton,
   CancelReasonInput,
   StatusBadge
 } from './BookingActions.styles';
@@ -25,6 +27,29 @@ const BookingActions = ({ booking, onStatusUpdate, onView, onEdit }) => {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancellationReason, setCancellationReason] = useState('');
   const [loading, setLoading] = useState(false);
+
+  // Fermer les modals avec la touche Échap
+  React.useEffect(() => {
+    const handleEscape = (e) => {
+      if (e.key === 'Escape') {
+        setShowConfirmModal(false);
+        setShowCancelModal(false);
+        setCancellationReason('');
+      }
+    };
+
+    if (showConfirmModal || showCancelModal) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [showConfirmModal, showCancelModal]);
 
   const handleStatusUpdate = async (newStatus) => {
     try {
@@ -109,9 +134,14 @@ const BookingActions = ({ booking, onStatusUpdate, onView, onEdit }) => {
       </ActionsContainer>
 
       {/* Modal de confirmation */}
-      {showConfirmModal && (
+      {showConfirmModal && createPortal(
         <ConfirmationModal>
-          <ModalOverlay onClick={() => setShowConfirmModal(false)}>
+          <ModalOverlay 
+            onClick={() => {
+              setShowConfirmModal(false);
+              setCancellationReason('');
+            }}
+          >
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <ModalHeader>
                 <ModalTitle>Confirmer la réservation</ModalTitle>
@@ -122,25 +152,36 @@ const BookingActions = ({ booking, onStatusUpdate, onView, onEdit }) => {
                 <p>{booking.appointmentDate} à {booking.appointmentTime}</p>
               </ModalBody>
               <ModalActions>
-                <ActionButton onClick={() => setShowConfirmModal(false)}>
+                <ActionButton 
+                  onClick={() => {
+                    setShowConfirmModal(false);
+                    setCancellationReason('');
+                  }}
+                >
                   Annuler
                 </ActionButton>
-                <ConfirmButton 
+                <ModalConfirmButton 
                   onClick={() => handleStatusUpdate('confirmed')}
                   disabled={loading}
                 >
                   {loading ? 'Confirmation...' : 'Confirmer'}
-                </ConfirmButton>
+                </ModalConfirmButton>
               </ModalActions>
             </ModalContent>
           </ModalOverlay>
-        </ConfirmationModal>
+        </ConfirmationModal>,
+        document.body
       )}
 
       {/* Modal d'annulation */}
-      {showCancelModal && (
+      {showCancelModal && createPortal(
         <ConfirmationModal>
-          <ModalOverlay onClick={() => setShowCancelModal(false)}>
+          <ModalOverlay 
+            onClick={() => {
+              setShowCancelModal(false);
+              setCancellationReason('');
+            }}
+          >
             <ModalContent onClick={(e) => e.stopPropagation()}>
               <ModalHeader>
                 <ModalTitle>Annuler la réservation</ModalTitle>
@@ -157,7 +198,12 @@ const BookingActions = ({ booking, onStatusUpdate, onView, onEdit }) => {
                 />
               </ModalBody>
               <ModalActions>
-                <ActionButton onClick={() => setShowCancelModal(false)}>
+                <ActionButton 
+                  onClick={() => {
+                    setShowCancelModal(false);
+                    setCancellationReason('');
+                  }}
+                >
                   Annuler
                 </ActionButton>
                 <CancelButton 
@@ -169,7 +215,8 @@ const BookingActions = ({ booking, onStatusUpdate, onView, onEdit }) => {
               </ModalActions>
             </ModalContent>
           </ModalOverlay>
-        </ConfirmationModal>
+        </ConfirmationModal>,
+        document.body
       )}
     </>
   );

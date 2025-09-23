@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FaArrowRight, FaPlay, FaSpinner } from 'react-icons/fa';
 import { statsAPI } from '../../services/api';
 import { HERO_DATA } from '../../constants';
+import { useNavbar } from '../../contexts/NavbarContext';
 
 import {
   HeroContainer,
@@ -25,6 +26,7 @@ import {
 const Hero = () => {
   const [stats, setStats] = useState([]);
   const [loading, setLoading] = useState(true);
+  const { isExtending } = useNavbar();
 
   useEffect(() => {
     // Charger les statistiques depuis l'API
@@ -62,19 +64,20 @@ const Hero = () => {
   }, []);
 
   return (
-    <HeroContainer>
+    <HeroContainer navbarExtended={isExtending}>
       <HeroContent>
         <HeroText>
           <motion.div
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
+            style={{ position: 'relative', zIndex: 3 }}
           >
             <HeroTitle>
-              Votre <span>coiffeur de confiance</span>
+              <span>BARBERSHOP</span>
             </HeroTitle>
             <HeroSubtitle>
-              L'art de la coiffure masculine moderne
+              L'art de la coiffure moderne
             </HeroSubtitle>
             <HeroDescription>
               Découvrez une expérience de coiffure exceptionnelle avec nos maîtres barbiers. 
@@ -86,16 +89,14 @@ const Hero = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8, delay: 0.3 }}
+            style={{ position: 'relative', zIndex: 3 }}
           >
             <HeroButtons>
               <Button as={Link} to="/booking">
                 Réserver maintenant
                 <FaArrowRight />
               </Button>
-              <ButtonSecondary>
-                <FaPlay />
-                Voir la vidéo
-              </ButtonSecondary>
+             
             </HeroButtons>
           </motion.div>
 
@@ -104,7 +105,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              style={{ textAlign: 'center', padding: '2rem' }}
+              style={{ textAlign: 'center', padding: '2rem', position: 'relative', zIndex: 3 }}
             >
               <FaSpinner style={{ animation: 'spin 1s linear infinite', fontSize: '2rem', marginBottom: '1rem' }} />
               <div style={{ fontSize: '1.2rem' }}>Chargement des statistiques...</div>
@@ -114,6 +115,7 @@ const Hero = () => {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
+              style={{ position: 'relative', zIndex: 3 }}
             >
               <HeroStats>
                 {stats.map((stat, index) => (
@@ -132,11 +134,15 @@ const Hero = () => {
             initial={{ opacity: 0, scale: 0.8 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.4 }}
+            style={{ position: 'relative', zIndex: 3 }}
           >
             <div className="hero-image-placeholder">
+              <video autoPlay muted loop playsInline>
+                <source src="/home.mp4" type="video/mp4" />
+              </video>
               <div className="image-content">
                 <h3>Votre Barbershop</h3>
-                <p>L'excellence de la coiffure masculine</p>
+                <p>L'excellence de la coiffure</p>
               </div>
             </div>
           </motion.div>
