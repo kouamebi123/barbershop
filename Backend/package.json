@@ -1,0 +1,48 @@
+{
+  "name": "barbershop-backend",
+  "version": "1.0.0",
+  "description": "Backend API pour le site web de barbershop moderne",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "start:clean": "node scripts/start-clean.js",
+    "dev": "nodemon server.js",
+    "dev:mock": "node scripts/start-without-db.js",
+    "test": "jest",
+    "migrate": "node scripts/migrate.js",
+    "init-db": "node scripts/init-db.js",
+    "init-db-docker": "node scripts/init-db-docker.js",
+    "db:create": "createdb barbershop_db",
+    "db:drop": "dropdb barbershop_db",
+    "db:reset": "npm run db:drop && npm run db:create && npm run migrate",
+    "seed": "node scripts/seed-data.js",
+    "clean": "node scripts/clean-test-data.js",
+    "reset": "node scripts/reset-database.js",
+    "update-dashboard": "node scripts/update-dashboard-data.js"
+  },
+  "keywords": ["barbershop", "booking", "api", "nodejs"],
+  "author": "Emmanuel Kouame",
+  "license": "MIT",
+  "dependencies": {
+    "express": "^4.18.2",
+    "cors": "^2.8.5",
+    "helmet": "^7.1.0",
+    "dotenv": "^16.3.1",
+    "bcryptjs": "^2.4.3",
+    "jsonwebtoken": "^9.0.2",
+    "pg": "^8.11.3",
+    "sequelize": "^6.35.0",
+    "nodemailer": "^6.9.7",
+    "twilio": "^4.19.0",
+    "joi": "^17.11.0",
+    "express-rate-limit": "^7.1.5",
+    "multer": "^1.4.5-lts.1",
+    "moment": "^2.29.4",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2",
+    "jest": "^29.7.0",
+    "supertest": "^6.3.3"
+  }
+}
