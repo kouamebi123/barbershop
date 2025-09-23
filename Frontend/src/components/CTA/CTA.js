@@ -52,7 +52,7 @@ const CTA = () => {
               <ContactInfo>
                 <ContactItem>
                   <FaPhone />
-                  <span>02 99 12 34 56</span>
+                  <span>Votre numéro</span>
                 </ContactItem>
                 <ContactItem>
                   <FaCalendarAlt />

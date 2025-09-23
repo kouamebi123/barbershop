@@ -55,14 +55,6 @@ module.exports = (sequelize) => {
         key: 'id'
       }
     },
-    barberId: {
-      type: DataTypes.UUID,
-      allowNull: true,
-      references: {
-        model: 'barbers',
-        key: 'id'
-      }
-    },
     status: {
       type: DataTypes.ENUM('pending', 'approved', 'rejected'),
       defaultValue: 'pending',
@@ -108,9 +100,6 @@ module.exports = (sequelize) => {
       {
         fields: ['locationId']
       },
-      {
-        fields: ['barberId']
-      }
     ]
   });
 

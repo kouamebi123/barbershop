@@ -80,6 +80,11 @@ const Location = sequelize.define('Location', {
   imageUrl: {
     type: DataTypes.STRING(500),
     allowNull: true
+  },
+  supported_genders: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    defaultValue: ['homme', 'femme'],
+    comment: 'Genres supportés par ce salon'
   }
 }, {
   tableName: 'locations',

@@ -1,4 +1,4 @@
-const { Booking, Service, Barber, Location, Admin } = require('../models');
+const { Booking, Service, Location, Admin } = require('../models');
 const BaseController = require('./BaseController');
 const { Op } = require('sequelize');
 const { notificationService } = require('../services/notificationService');
@@ -16,7 +16,6 @@ class BookingController extends BaseController {
         search, 
         status, 
         locationId, 
-        barberId, 
         serviceId,
         dateFrom,
         dateTo 
@@ -34,9 +33,6 @@ class BookingController extends BaseController {
         whereConditions.locationId = locationId;
       }
       
-      if (barberId) {
-        whereConditions.barberId = barberId;
-      }
       
       if (serviceId) {
         whereConditions['$services.id$'] = serviceId;
@@ -67,11 +63,6 @@ class BookingController extends BaseController {
             model: Service,
             as: 'services',
             through: { attributes: [] }
-          },
-          {
-            model: Barber,
-            as: 'barber',
-            attributes: ['id', 'firstName', 'lastName', 'email', 'phone']
           },
           {
             model: Location,
@@ -116,11 +107,6 @@ class BookingController extends BaseController {
             through: { attributes: [] }
           },
           {
-            model: Barber,
-            as: 'barber',
-            attributes: ['id', 'firstName', 'lastName', 'email', 'phone']
-          },
-          {
             model: Location,
             as: 'location',
             attributes: ['id', 'name', 'address', 'city', 'phone']
@@ -145,10 +131,13 @@ class BookingController extends BaseController {
   static async create(req, res) {
     try {
       const bookingData = req.body;
+      console.log('Données reçues pour la réservation:', bookingData);
 
       // Validation des données requises
-      const requiredFields = ['customerName', 'customerEmail', 'customerPhone', 'appointmentDate', 'services', 'locationId'];
+      const requiredFields = ['customerName', 'customerEmail', 'customerPhone', 'appointmentDate', 'appointmentTime', 'services', 'locationId'];
       const missingFields = requiredFields.filter(field => !bookingData[field]);
+      
+      console.log('Champs manquants:', missingFields);
       
       if (missingFields.length > 0) {
         return this.validationError(res, {
@@ -209,7 +198,6 @@ class BookingController extends BaseController {
         appointmentDate: bookingData.appointmentDate,
         appointmentTime: bookingData.appointmentTime,
         locationId: bookingData.locationId,
-        barberId: bookingData.barberId,
         totalPrice,
         duration: totalDuration,
         bookingReference,
@@ -295,6 +283,47 @@ class BookingController extends BaseController {
       }
 
       return BaseController.error(res, 'Erreur lors de la mise à jour de la réservation', 500, error);
+    }
+  }
+
+  /**
+   * Mettre à jour le statut d'une réservation (admin)
+   */
+  static async updateStatus(req, res) {
+    try {
+      const { id } = req.params;
+      const { status, cancellationReason } = req.body;
+
+      console.log('🔍 [BookingController] updateStatus - ID:', id, 'Status:', status);
+
+      // Validation du statut
+      const validStatuses = ['pending', 'confirmed', 'completed', 'cancelled', 'no_show'];
+      if (!validStatuses.includes(status)) {
+        return BaseController.error(res, 'Statut invalide', 400, 'Le statut doit être: pending, confirmed, completed, cancelled, ou no_show');
+      }
+
+      // Trouver la réservation
+      const booking = await Booking.findByPk(id);
+      if (!booking) {
+        return BaseController.error(res, 'Réservation non trouvée', 404);
+      }
+
+      // Mettre à jour le statut
+      const updateData = { status };
+      
+      if (status === 'cancelled' && cancellationReason) {
+        updateData.cancellationReason = cancellationReason;
+      }
+
+      await booking.update(updateData);
+
+      console.log('🔍 [BookingController] updateStatus - Updated booking:', id, 'to status:', status);
+
+      return BaseController.success(res, booking, 'Statut de la réservation mis à jour avec succès');
+
+    } catch (error) {
+      console.error('❌ [BookingController] updateStatus - Error:', error);
+      return BaseController.error(res, 'Erreur lors de la mise à jour du statut', 500, error);
     }
   }
 
@@ -387,38 +416,6 @@ class BookingController extends BaseController {
 
     } catch (error) {
       return BaseController.error(res, 'Erreur lors de l\'annulation de la réservation', 500, error);
-    }
-  }
-
-  /**
-   * Récupérer les disponibilités
-   */
-  static async getAvailability(req, res) {
-    try {
-      const { locationId, serviceIds, date } = req.query;
-
-      if (!locationId || !serviceIds || !date) {
-        return this.validationError(res, {
-          message: 'Paramètres requis manquants',
-          required: ['locationId', 'serviceIds', 'date']
-        });
-      }
-
-      // Logique de vérification des disponibilités
-      // Ici, vous pouvez implémenter la logique de vérification des créneaux disponibles
-      const availability = {
-        date,
-        availableSlots: [
-          '09:00', '09:30', '10:00', '10:30', '11:00', '11:30',
-          '14:00', '14:30', '15:00', '15:30', '16:00', '16:30',
-          '17:00', '17:30', '18:00'
-        ]
-      };
-
-      return BaseController.success(res, availability, 'Disponibilités récupérées avec succès');
-
-    } catch (error) {
-      return BaseController.error(res, 'Erreur lors de la récupération des disponibilités', 500, error);
     }
   }
 

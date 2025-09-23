@@ -1,4 +1,4 @@
-const { Location, Barber, Service, Booking } = require('../models');
+const { Location, Service, Booking } = require('../models');
 const BaseController = require('./BaseController');
 const { Op } = require('sequelize');
 
@@ -10,14 +10,12 @@ class StatsController extends BaseController {
     try {
       const [
         totalLocations,
-        totalBarbers,
         totalServices,
         totalBookings,
         confirmedBookings,
         totalRevenue
       ] = await Promise.all([
         Location.count({ where: { isActive: true } }),
-        Barber.count({ where: { isActive: true } }),
         Service.count({ where: { isActive: true } }),
         Booking.count(),
         Booking.count({ where: { status: 'confirmed' } }),
@@ -26,7 +24,6 @@ class StatsController extends BaseController {
 
       const stats = {
         totalLocations,
-        totalBarbers,
         totalServices,
         totalBookings,
         confirmedBookings,
@@ -61,7 +58,6 @@ class StatsController extends BaseController {
 
       const [
         totalLocations,
-        totalBarbers,
         totalServices,
         totalBookings,
         confirmedBookings,
@@ -71,7 +67,6 @@ class StatsController extends BaseController {
         recentBookings
       ] = await Promise.all([
         Location.count({ where: { isActive: true } }),
-        Barber.count({ where: { isActive: true } }),
         Service.count({ where: { isActive: true } }),
         Booking.count({ where: dateConditions }),
         Booking.count({ where: { ...dateConditions, status: 'confirmed' } }),
@@ -86,11 +81,6 @@ class StatsController extends BaseController {
               as: 'location',
               attributes: ['id', 'name']
             },
-            {
-              model: Barber,
-              as: 'barber',
-              attributes: ['id', 'firstName', 'lastName']
-            }
           ],
           order: [['createdAt', 'DESC']],
           limit: 5
@@ -100,7 +90,6 @@ class StatsController extends BaseController {
       const stats = {
         overview: {
           totalLocations,
-          totalBarbers,
           totalServices,
           totalBookings,
           confirmedBookings,

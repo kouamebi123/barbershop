@@ -61,19 +61,6 @@ export const locationsAPI = {
   getById: (id) => api.get(`/locations/${id}`),
 };
 
-export const barbersAPI = {
-  // Récupérer tous les coiffeurs
-  getAll: () => api.get('/barbers'),
-  
-  // Récupérer les coiffeurs par location
-  getByLocation: (locationId) => api.get(`/barbers?locationId=${locationId}`),
-  
-  // Récupérer un coiffeur par ID
-  getById: (id) => api.get(`/barbers/${id}`),
-  
-  // Récupérer les spécialisations
-  getSpecializations: () => api.get('/barbers/specializations'),
-};
 
 export const bookingsAPI = {
   // Récupérer toutes les réservations
@@ -92,7 +79,7 @@ export const bookingsAPI = {
   cancel: (id, reason) => api.put(`/bookings/${id}`, { status: 'cancelled', cancellationReason: reason }),
   
   // Récupérer les disponibilités
-  getAvailability: (locationId, barberId, date) => api.get(`/bookings/availability/${barberId}?locationId=${locationId}&date=${date}`),
+  getAvailability: (locationId, date) => api.get(`/bookings/availability?locationId=${locationId}&date=${date}`),
 };
 
 export const authAPI = {
@@ -131,6 +118,10 @@ export const adminAPI = {
   
   // Exporter les réservations
   exportBookings: (params = {}) => api.get('/admin/export/bookings', { params, responseType: 'blob' }),
+  
+  // Mettre à jour le statut d'une réservation
+  updateBookingStatus: (id, status, cancellationReason = null) => 
+    api.patch(`/bookings/${id}/status`, { status, cancellationReason }),
 };
 
 export const testimonialsAPI = {
@@ -151,6 +142,23 @@ export const testimonialsAPI = {
   
   // Récupérer les statistiques des témoignages (admin)
   getStats: () => api.get('/testimonials/admin/stats'),
+};
+
+// API pour le système de genres
+export const genderAPI = {
+  // Récupérer tous les genres disponibles
+  getGenders: () => api.get('/gender/genders'),
+  
+  // Récupérer les types de coupes par genre
+  getHaircutTypes: (gender) => api.get(`/gender/haircut-types/${gender}`),
+  
+  // Récupérer les services par genre et type de coupe
+  getServices: (gender, haircutType) => api.get(`/gender/services/${gender}/${haircutType}`),
+  
+  // Récupérer les salons par genre et type de coupe
+  getLocations: (gender, haircutType) => api.get(`/gender/locations/${gender}/${haircutType}`),
+  
+  // Récupérer les coiffeurs par salon, genre et type de coupe
 };
 
 export default api;

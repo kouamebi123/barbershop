@@ -1,22 +1,11 @@
 const { sequelize } = require('../config/database');
 const Location = require('./Location');
 const Service = require('./Service');
-const Barber = require('./Barber');
 const Booking = require('./Booking');
 const Admin = require('./Admin');
 const Testimonial = require('./Testimonial');
 
 // Modèles de liaison
-const BarberLocation = sequelize.define('BarberLocation', {
-  id: {
-    type: require('sequelize').DataTypes.UUID,
-    defaultValue: require('sequelize').DataTypes.UUIDV4,
-    primaryKey: true
-  }
-}, {
-  tableName: 'barber_locations'
-});
-
 const BookingService = sequelize.define('BookingService', {
   id: {
     type: require('sequelize').DataTypes.UUID,
@@ -35,18 +24,6 @@ const BookingService = sequelize.define('BookingService', {
 });
 
 // Associations
-// Barber <-> Location (Many-to-Many)
-Barber.belongsToMany(Location, { 
-  through: BarberLocation, 
-  foreignKey: 'barberId',
-  as: 'locations'
-});
-Location.belongsToMany(Barber, { 
-  through: BarberLocation, 
-  foreignKey: 'locationId',
-  as: 'barbers'
-});
-
 // Booking <-> Service (Many-to-Many)
 Booking.belongsToMany(Service, { 
   through: BookingService, 
@@ -69,16 +46,6 @@ Location.hasMany(Booking, {
   as: 'bookings'
 });
 
-// Booking -> Barber (Many-to-One)
-Booking.belongsTo(Barber, { 
-  foreignKey: 'barberId',
-  as: 'barber'
-});
-Barber.hasMany(Booking, { 
-  foreignKey: 'barberId',
-  as: 'bookings'
-});
-
 // Service -> Location (Many-to-One) - Services disponibles par location
 Service.belongsTo(Location, { 
   foreignKey: 'locationId',
@@ -89,20 +56,12 @@ Location.hasMany(Service, {
   as: 'services'
 });
 
-// Testimonial associations (après la définition des modèles)
-// Ces associations seront définies après l'initialisation des modèles
-
 module.exports = {
   sequelize,
   Location,
   Service,
-  Barber,
   Booking,
   Admin,
   Testimonial,
-  BarberLocation,
   BookingService
 };
-
-// Associations pour Testimonial (définies après l'export pour éviter les erreurs de dépendance circulaire)
-// Ces associations seront définies dans le contrôleur si nécessaire

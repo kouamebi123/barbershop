@@ -129,9 +129,9 @@ const Contact = () => {
   return (
     <ContactContainer>
       <Helmet>
-        <title>Contact - Barbershop Rennes</title>
-        <meta name="description" content="Contactez-nous pour toute question ou réservation. Nos salons sont situés à Rennes avec des horaires d'ouverture adaptés." />
-        <meta name="keywords" content="contact, barbershop, Rennes, adresse, téléphone, email, horaires" />
+        <title>Contact - Barbershop</title>
+        <meta name="description" content="Contactez-nous pour toute question ou réservation. Nos salons sont situés dans votre ville avec des horaires d'ouverture adaptés." />
+        <meta name="keywords" content="contact, barbershop, adresse, téléphone, email, horaires" />
       </Helmet>
 
       {/* Hero Section */}
@@ -194,8 +194,8 @@ const Contact = () => {
                       <FaEnvelope />
                     </InfoIcon>
                     <InfoTitle>Email</InfoTitle>
-                    <InfoText>contact@barbershop-rennes.fr</InfoText>
-                    <InfoText>reservation@barbershop-rennes.fr</InfoText>
+                    <InfoText>contact@barbershop.fr</InfoText>
+                    <InfoText>reservation@barbershop.fr</InfoText>
                   </InfoCard>
                 </motion.div>
 
@@ -222,7 +222,7 @@ const Contact = () => {
                       <InfoText>
                         <strong>Salon Principal</strong><br />
                         12 Rue de la Barbe<br />
-                        35000 Rennes
+                        Votre ville
                       </InfoText>
                     )}
                   </InfoCard>
@@ -386,7 +386,7 @@ const Contact = () => {
         >
           <SectionTitle>Nos Emplacements</SectionTitle>
           <SectionSubtitle>
-            Retrouvez-nous dans nos différents salons à Rennes
+            Retrouvez-nous dans nos différents salons
           </SectionSubtitle>
 
           <MapContainer>

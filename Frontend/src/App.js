@@ -2,6 +2,9 @@ import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 import { Helmet, HelmetProvider } from 'react-helmet-async';
 
+// Contexts
+import { AuthProvider } from './contexts/AuthContext';
+
 // Components
 import Navbar from './components/Navbar/Navbar';
 import Footer from './components/Footer/Footer';
@@ -25,30 +28,71 @@ import { AppContainer } from './App.styles';
 function App() {
   return (
     <HelmetProvider>
-      <AppContainer>
-        <GlobalStyles />
-        <Helmet>
-          <title>Barbershop Rennes - Votre coiffeur de confiance</title>
-          <meta name="description" content="Barbershop moderne à Rennes. Réservation en ligne, services professionnels, équipe expérimentée. Prenez rendez-vous facilement !" />
-        </Helmet>
-      
-      <ScrollToTop />
-      <Navbar />
-      
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/services" element={<Services />} />
-        <Route path="/booking" element={<Booking />} />
-        <Route path="/locations" element={<Locations />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/admin/login" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<AdminDashboard />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-      
-      <Footer />
-      </AppContainer>
+      <AuthProvider>
+        <AppContainer>
+          <GlobalStyles />
+          <Helmet>
+            <title>Barbershop - Votre coiffeur de confiance</title>
+            <meta name="description" content="Barbershop moderne. Réservation en ligne, services professionnels, équipe expérimentée. Prenez rendez-vous facilement !" />
+          </Helmet>
+        
+        <ScrollToTop />
+        
+        <Routes>
+          <Route path="/" element={
+            <>
+              <Navbar />
+              <Home />
+              <Footer />
+            </>
+          } />
+          <Route path="/about" element={
+            <>
+              <Navbar />
+              <About />
+              <Footer />
+            </>
+          } />
+          <Route path="/services" element={
+            <>
+              <Navbar />
+              <Services />
+              <Footer />
+            </>
+          } />
+          <Route path="/booking" element={
+            <>
+              <Navbar />
+              <Booking />
+              <Footer />
+            </>
+          } />
+          <Route path="/locations" element={
+            <>
+              <Navbar />
+              <Locations />
+              <Footer />
+            </>
+          } />
+          <Route path="/contact" element={
+            <>
+              <Navbar />
+              <Contact />
+              <Footer />
+            </>
+          } />
+          <Route path="/admin/login" element={<AdminLogin />} />
+          <Route path="/admin/dashboard" element={<AdminDashboard />} />
+          <Route path="*" element={
+            <>
+              <Navbar />
+              <NotFound />
+              <Footer />
+            </>
+          } />
+        </Routes>
+        </AppContainer>
+      </AuthProvider>
     </HelmetProvider>
   );
 }

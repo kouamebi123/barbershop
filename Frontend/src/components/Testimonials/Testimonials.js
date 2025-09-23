@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { FaQuoteLeft, FaStar, FaSpinner, FaPlus, FaTimes } from 'react-icons/fa';
 import { toast } from 'react-toastify';
-import { testimonialsAPI, servicesAPI, locationsAPI, barbersAPI } from '../../services/api';
+import { testimonialsAPI, servicesAPI, locationsAPI } from '../../services/api';
+import { TESTIMONIALS_PREVIEW } from '../../constants';
 
 import {
   Section,
@@ -43,11 +44,9 @@ const Testimonials = () => {
     comment: '',
     serviceId: '',
     locationId: '',
-    barberId: ''
   });
   const [services, setServices] = useState([]);
   const [locations, setLocations] = useState([]);
-  const [barbers, setBarbers] = useState([]);
 
   useEffect(() => {
     fetchTestimonials();
@@ -78,11 +77,10 @@ const Testimonials = () => {
 
   const fetchFormData = async () => {
     try {
-      // Charger les services, locations et barbers pour le formulaire
-      const [servicesRes, locationsRes, barbersRes] = await Promise.all([
+      // Charger les services et locations pour le formulaire
+      const [servicesRes, locationsRes] = await Promise.all([
         servicesAPI.getAll(),
-        locationsAPI.getAll(),
-        barbersAPI.getAll()
+        locationsAPI.getAll()
       ]);
 
       if (servicesRes.data.success) {
@@ -90,9 +88,6 @@ const Testimonials = () => {
       }
       if (locationsRes.data.success) {
         setLocations(locationsRes.data.data.locations || []);
-      }
-      if (barbersRes.data.success) {
-        setBarbers(barbersRes.data.data.barbers || []);
       }
     } catch (error) {
       console.error('❌ [Testimonials] Error fetching form data:', error);
@@ -134,7 +129,6 @@ const Testimonials = () => {
           comment: '',
           serviceId: '',
           locationId: '',
-          barberId: ''
         });
         // Rafraîchir la liste des témoignages
         fetchTestimonials();
@@ -285,21 +279,6 @@ const Testimonials = () => {
                 </FormSelect>
               </FormGroup>
 
-              <FormGroup>
-                <FormLabel>Coiffeur (optionnel)</FormLabel>
-                <FormSelect
-                  name="barberId"
-                  value={formData.barberId}
-                  onChange={handleInputChange}
-                >
-                  <option value="">Sélectionner un coiffeur</option>
-                  {barbers.map(barber => (
-                    <option key={barber.id} value={barber.id}>
-                      {barber.firstName} {barber.lastName}
-                    </option>
-                  ))}
-                </FormSelect>
-              </FormGroup>
 
               <FormButtonGroup>
                 <FormButton type="button" onClick={() => setShowForm(false)}>

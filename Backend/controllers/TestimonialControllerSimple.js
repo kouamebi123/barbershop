@@ -14,7 +14,6 @@ class TestimonialControllerSimple extends BaseController {
       comment: Joi.string().min(10).max(1000).required(),
       serviceId: Joi.string().uuid().optional(),
       locationId: Joi.string().uuid().optional(),
-      barberId: Joi.string().uuid().optional()
     });
   }
 
@@ -29,7 +28,7 @@ class TestimonialControllerSimple extends BaseController {
       const testimonialsQuery = `
         SELECT id, customer_name as "customerName", customer_email as "customerEmail", 
                rating, comment, service_id as "serviceId", location_id as "locationId", 
-               barber_id as "barberId", status, created_at as "createdAt", updated_at as "updatedAt"
+               status, created_at as "createdAt", updated_at as "updatedAt"
         FROM testimonials 
         WHERE status = 'approved' AND is_active = true
         ORDER BY created_at DESC
@@ -62,16 +61,16 @@ class TestimonialControllerSimple extends BaseController {
         return BaseController.error(res, 'Données invalides', 400, error.details[0].message);
       }
 
-      const { customerName, customerEmail, rating, comment, serviceId, locationId, barberId } = value;
+      const { customerName, customerEmail, rating, comment, serviceId, locationId } = value;
 
-      // Créer le témoignage avec des paramètres nommés
-      const insertQuery = `
-        INSERT INTO testimonials (customer_name, customer_email, rating, comment, service_id, location_id, barber_id, status, created_at, updated_at)
-        VALUES (:customerName, :customerEmail, :rating, :comment, :serviceId, :locationId, :barberId, 'pending', NOW(), NOW())
-        RETURNING id, customer_name as "customerName", customer_email as "customerEmail", 
-                  rating, comment, service_id as "serviceId", location_id as "locationId", 
-                  barber_id as "barberId", status, created_at as "createdAt", updated_at as "updatedAt"
-      `;
+          // Créer le témoignage avec des paramètres nommés
+          const insertQuery = `
+            INSERT INTO testimonials (customer_name, customer_email, rating, comment, service_id, location_id, status, created_at, updated_at)
+            VALUES (:customerName, :customerEmail, :rating, :comment, :serviceId, :locationId, 'pending', NOW(), NOW())
+            RETURNING id, customer_name as "customerName", customer_email as "customerEmail", 
+                      rating, comment, service_id as "serviceId", location_id as "locationId", 
+                      status, created_at as "createdAt", updated_at as "updatedAt"
+          `;
 
       const replacements = {
         customerName,
@@ -79,8 +78,7 @@ class TestimonialControllerSimple extends BaseController {
         rating,
         comment,
         serviceId: serviceId || null,
-        locationId: locationId || null,
-        barberId: barberId || null
+        locationId: locationId || null
       };
       console.log('🔍 [TestimonialControllerSimple] create - Replacements:', replacements);
 

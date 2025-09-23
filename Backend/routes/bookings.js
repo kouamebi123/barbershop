@@ -5,7 +5,6 @@ const { auth } = require('../middleware/auth');
 const router = express.Router();
 
 // Routes publiques
-router.get('/availability', (req, res) => BookingController.getAvailability(req, res));
 router.post('/', (req, res) => BookingController.create(req, res));
 
 // Routes protégées (admin uniquement)
@@ -16,5 +15,6 @@ router.put('/:id', auth, (req, res) => BookingController.update(req, res));
 router.delete('/:id', auth, (req, res) => BookingController.delete(req, res));
 router.patch('/:id/confirm', auth, (req, res) => BookingController.confirm(req, res));
 router.patch('/:id/cancel', auth, (req, res) => BookingController.cancel(req, res));
+router.patch('/:id/status', auth, (req, res) => BookingController.updateStatus(req, res));
 
 module.exports = router;

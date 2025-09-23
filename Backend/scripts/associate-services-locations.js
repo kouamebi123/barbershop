@@ -1,43 +1,48 @@
-const { sequelize, Location, Service } = require('../models');
+const { sequelize } = require('../config/database');
+const { Location, Service } = require('../models');
 
-const associateServicesLocations = async () => {
+async function associateServicesLocations() {
   try {
-    console.log('🔗 Association des services aux locations...');
-
-    // Récupérer toutes les locations
-    const locations = await Location.findAll({ where: { isActive: true } });
-    console.log(`✅ ${locations.length} locations trouvées`);
-
+    console.log('🔗 Association des services aux salons...');
+    
+    // Récupérer tous les salons
+    const locations = await Location.findAll();
+    console.log(`✅ ${locations.length} salons trouvés`);
+    
     // Récupérer tous les services
-    const services = await Service.findAll({ where: { isActive: true } });
+    const services = await Service.findAll();
     console.log(`✅ ${services.length} services trouvés`);
-
-    // Associer chaque service à chaque location
+    
+    // Associer chaque service à tous les salons qui supportent le genre du service
     for (const service of services) {
-      for (const location of locations) {
-        try {
-          await service.setLocation(location);
-          console.log(`✅ Service "${service.name}" associé à "${location.name}"`);
-        } catch (error) {
-          console.log(`⚠️  Service "${service.name}" déjà associé à "${location.name}"`);
-        }
+      const compatibleLocations = locations.filter(location => 
+        location.supported_genders.includes(service.gender) || 
+        location.supported_genders.includes('unisex')
+      );
+      
+      for (const location of compatibleLocations) {
+        await service.setLocation(location);
+        console.log(`✅ Service "${service.name}" associé au salon "${location.name}"`);
       }
     }
-
-    // Vérifier les associations
-    for (const location of locations) {
-      const locationServices = await location.getServices();
-      console.log(`📍 ${location.name}: ${locationServices.length} services`);
-    }
-
+    
     console.log('🎉 Association terminée avec succès !');
-
+    
   } catch (error) {
     console.error('❌ Erreur lors de l\'association:', error);
+    throw error;
   } finally {
     await sequelize.close();
   }
-};
+}
 
-// Exécuter l'association
-associateServicesLocations();
+// Exécuter le script
+associateServicesLocations()
+  .then(() => {
+    console.log('✅ Script terminé avec succès');
+    process.exit(0);
+  })
+  .catch((error) => {
+    console.error('❌ Erreur:', error);
+    process.exit(1);
+  });

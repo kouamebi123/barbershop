@@ -5,6 +5,8 @@ import { FaLock, FaUser, FaEye, FaEyeSlash, FaSpinner, FaExclamationTriangle } f
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { authAPI } from '../../services/api';
+import { ADMIN_LOGIN } from '../../constants';
+import { useAuth } from '../../contexts/AuthContext';
 
 import {
   LoginContainer,
@@ -27,14 +29,15 @@ import {
 } from './AdminLogin.styles';
 
 const AdminLogin = () => {
+  const navigate = useNavigate();
+  const { login, clearAuth } = useAuth();
   const [formData, setFormData] = useState({
-    email: '',
+    username: '',
     password: ''
   });
   const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const navigate = useNavigate();
 
   // Vérifier si l'utilisateur est déjà connecté
   useEffect(() => {
@@ -57,21 +60,27 @@ const AdminLogin = () => {
     setShowPassword(!showPassword);
   };
 
+  const handleClearAuth = () => {
+    clearAuth();
+    setError('');
+    toast.info('Données d\'authentification nettoyées');
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
 
     try {
-      const response = await authAPI.login(formData);
-      const { token, admin } = response.data;
-
-      // Stocker le token et les informations admin
-      localStorage.setItem('token', token);
-      localStorage.setItem('admin', JSON.stringify(admin));
-
-      toast.success('Connexion réussie !');
-      navigate('/admin/dashboard');
+      const result = await login(formData);
+      
+      if (result.success) {
+        toast.success('Connexion réussie !');
+        navigate('/admin/dashboard');
+      } else {
+        setError(result.error);
+        toast.error(result.error);
+      }
     } catch (err) {
       console.error('Erreur de connexion:', err);
       const errorMessage = err.response?.data?.error || 'Erreur de connexion. Vérifiez vos identifiants.';
@@ -85,8 +94,8 @@ const AdminLogin = () => {
   return (
     <LoginContainer>
       <Helmet>
-        <title>Connexion Admin - Barbershop Rennes</title>
-        <meta name="description" content="Espace d'administration pour la gestion du barbershop" />
+        <title>{ADMIN_LOGIN.title}</title>
+        <meta name="description" content={ADMIN_LOGIN.description} />
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>
 
@@ -97,9 +106,9 @@ const AdminLogin = () => {
       >
         <LoginCard>
           <LoginHeader>
-            <LoginTitle>Espace Administration</LoginTitle>
+            <LoginTitle>{ADMIN_LOGIN.title}</LoginTitle>
             <LoginSubtitle>
-              Connectez-vous pour accéder au tableau de bord
+              {ADMIN_LOGIN.subtitle}
             </LoginSubtitle>
           </LoginHeader>
 
@@ -111,16 +120,16 @@ const AdminLogin = () => {
             )}
 
             <FormGroup>
-              <Label htmlFor="email">Email</Label>
+              <Label htmlFor="username">Nom d'utilisateur</Label>
               <Input
-                type="email"
-                id="email"
-                name="email"
-                value={formData.email}
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
                 onChange={handleInputChange}
-                placeholder="Entrez votre email"
+                placeholder="Entrez votre nom d'utilisateur"
                 required
-                autoComplete="email"
+                autoComplete="username"
               />
             </FormGroup>
 
@@ -163,8 +172,25 @@ const AdminLogin = () => {
               Retour au site public
             </FooterText>
             <FooterLink as={Link} to="/">
-              Barbershop Rennes
+              Barbershop
             </FooterLink>
+            <div style={{ marginTop: '1rem' }}>
+              <button 
+                type="button" 
+                onClick={handleClearAuth}
+                style={{
+                  background: 'transparent',
+                  border: '1px solid #ccc',
+                  color: '#666',
+                  padding: '0.5rem 1rem',
+                  borderRadius: '4px',
+                  cursor: 'pointer',
+                  fontSize: '0.9rem'
+                }}
+              >
+                Nettoyer les données
+              </button>
+            </div>
           </LoginFooter>
         </LoginCard>
       </motion.div>

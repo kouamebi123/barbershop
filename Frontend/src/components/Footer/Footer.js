@@ -11,6 +11,7 @@ import {
   FaClock,
   FaArrowUp
 } from 'react-icons/fa';
+import { APP_CONFIG, SOCIAL_LINKS, OPENING_HOURS } from '../../constants';
 
 import {
   FooterContainer,

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes, FaPhone, FaMapMarkerAlt } from 'react-icons/fa';
+import { APP_CONFIG } from '../../constants';
 import { 
   NavbarContainer, 
   NavbarWrapper, 
@@ -68,7 +69,7 @@ const Navbar = () => {
         <ContactInfo>
           <div>
             <FaPhone />
-            <span>02 99 12 34 56</span>
+            <span>Votre numéro</span>
           </div>
           <div>
             <FaMapMarkerAlt />

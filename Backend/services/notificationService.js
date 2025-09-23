@@ -186,7 +186,7 @@ class NotificationService {
               <p><strong>Référence:</strong> ${booking.bookingReference}</p>
               <p><strong>Date:</strong> ${booking.appointmentDate}</p>
               <p><strong>Heure:</strong> ${booking.appointmentTime}</p>
-              <p><strong>Coiffeur:</strong> ${booking.barber.firstName} ${booking.barber.lastName}</p>
+              <p><strong>Service:</strong> ${booking.services?.map(s => s.name).join(', ') || 'Service général'}</p>
               <p><strong>Adresse:</strong> ${booking.location.name}<br>
                  ${booking.location.address}<br>
                  ${booking.location.city} ${booking.location.postalCode}</p>
@@ -240,7 +240,7 @@ class NotificationService {
               <h3>Votre rendez-vous</h3>
               <p><strong>Date:</strong> ${booking.appointmentDate}</p>
               <p><strong>Heure:</strong> ${booking.appointmentTime}</p>
-              <p><strong>Coiffeur:</strong> ${booking.barber.firstName} ${booking.barber.lastName}</p>
+              <p><strong>Service:</strong> ${booking.services?.map(s => s.name).join(', ') || 'Service général'}</p>
               <p><strong>Services:</strong> ${services}</p>
               <p><strong>Adresse:</strong> ${booking.location.name}<br>
                  ${booking.location.address}<br>

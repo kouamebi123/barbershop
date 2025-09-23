@@ -7,38 +7,47 @@ class AvailabilityController extends BaseController {
    */
   static async getAvailability(req, res) {
     try {
-      const { barberId } = req.params;
       const { locationId, date } = req.query;
 
-      console.log('🔍 [AvailabilityController] getAvailability - Params:', { barberId, locationId, date });
+      console.log('🔍 [AvailabilityController] getAvailability - Params:', { locationId, date });
 
-      if (!barberId || !locationId || !date) {
-        return BaseController.error(res, 'Paramètres manquants', 400, 'barberId, locationId et date sont requis');
+      if (!locationId || !date) {
+        return BaseController.error(res, 'Paramètres manquants', 400, 'locationId et date sont requis');
       }
 
-      // Vérifier que le coiffeur existe et travaille dans cette location
-      const barberQuery = `
-        SELECT b.*, bl.location_id
-        FROM barbers b
-        JOIN barber_locations bl ON b.id = bl.barber_id
-        WHERE b.id = :barberId AND bl.location_id = :locationId AND b.is_active = true
+      // Vérifier que la location existe
+      const locationQuery = `
+        SELECT * FROM locations 
+        WHERE id = :locationId AND is_active = true
       `;
 
-      const barberResult = await sequelize.query(barberQuery, {
-        replacements: { barberId, locationId },
+      const locationResult = await sequelize.query(locationQuery, {
+        replacements: { locationId },
         type: sequelize.QueryTypes.SELECT
       });
 
-      if (barberResult.length === 0) {
-        return BaseController.error(res, 'Coiffeur non trouvé', 404, 'Le coiffeur n\'existe pas ou ne travaille pas dans cette location');
+      if (locationResult.length === 0) {
+        return BaseController.error(res, 'Location non trouvée', 404, 'La location n\'existe pas ou est inactive');
       }
 
-      const barber = barberResult[0];
-      console.log('🔍 [AvailabilityController] getAvailability - Barber found:', barber.first_name, barber.last_name);
+      const location = locationResult[0];
+      console.log('🔍 [AvailabilityController] getAvailability - Location found:', location.name);
+      console.log('🔍 [AvailabilityController] getAvailability - Opening hours:', location.opening_hours);
+
+      // Parser les heures d'ouverture si c'est un JSON string
+      let openingHours = location.opening_hours;
+      if (typeof openingHours === 'string') {
+        try {
+          openingHours = JSON.parse(openingHours);
+        } catch (e) {
+          console.error('❌ [AvailabilityController] Error parsing opening_hours:', e);
+          openingHours = {};
+        }
+      }
 
       // Générer les créneaux disponibles pour la date donnée
-      const availableSlots = generateAvailableSlots(barber, date);
-
+      console.log('🔍 [AvailabilityController] getAvailability - About to generate slots...');
+      const availableSlots = generateAvailableSlots({ ...location, opening_hours: openingHours }, date);
       console.log('🔍 [AvailabilityController] getAvailability - Generated slots:', availableSlots.length);
 
       return BaseController.success(res, availableSlots, 'Créneaux disponibles récupérés avec succès');
@@ -51,58 +60,73 @@ class AvailabilityController extends BaseController {
 }
 
 /**
- * Générer les créneaux disponibles pour un coiffeur
+ * Générer les créneaux disponibles pour une location
  */
-function generateAvailableSlots(barber, date) {
-  const slots = [];
-  const appointmentDate = new Date(date);
-  const dayOfWeek = appointmentDate.toLocaleDateString('fr-FR', { weekday: 'long' }).toLowerCase();
-  
-  // Mapper les jours français vers anglais
-  const dayMapping = {
-    'lundi': 'monday',
-    'mardi': 'tuesday', 
-    'mercredi': 'wednesday',
-    'jeudi': 'thursday',
-    'vendredi': 'friday',
-    'samedi': 'saturday',
-    'dimanche': 'sunday'
-  };
-  
-  const englishDay = dayMapping[dayOfWeek];
-  const workingHours = barber.working_hours?.[englishDay];
-  
-  if (!workingHours || !workingHours.working) {
-    console.log('🔍 [AvailabilityController] Barber not working on', dayOfWeek);
-    return slots;
-  }
-
-  const startTime = workingHours.start;
-  const endTime = workingHours.end;
-  
-  // Convertir les heures en minutes pour faciliter les calculs
-  const startMinutes = timeToMinutes(startTime);
-  const endMinutes = timeToMinutes(endTime);
-  
-  // Générer des créneaux de 30 minutes
-  for (let minutes = startMinutes; minutes < endMinutes; minutes += 30) {
-    const timeString = minutesToTime(minutes);
-    const slotDateTime = new Date(appointmentDate);
-    const [hours, mins] = timeString.split(':').map(Number);
-    slotDateTime.setHours(hours, mins, 0, 0);
+function generateAvailableSlots(location, date) {
+  try {
+    console.log('🔍 [generateAvailableSlots] Starting with location:', location.name, 'date:', date);
+    const slots = [];
+    const appointmentDate = new Date(date);
+    const dayOfWeek = appointmentDate.toLocaleDateString('fr-FR', { weekday: 'long' }).toLowerCase();
     
-    slots.push({
-      id: `${barber.id}-${date}-${timeString}`,
-      time: timeString,
-      date: date,
-      barberId: barber.id,
-      barberName: `${barber.first_name} ${barber.last_name}`,
-      available: true,
-      slotDateTime: slotDateTime.toISOString()
-    });
+    console.log('🔍 [generateAvailableSlots] Day of week:', dayOfWeek);
+    
+    // Mapper les jours français vers anglais
+    const dayMapping = {
+      'lundi': 'monday',
+      'mardi': 'tuesday', 
+      'mercredi': 'wednesday',
+      'jeudi': 'thursday',
+      'vendredi': 'friday',
+      'samedi': 'saturday',
+      'dimanche': 'sunday'
+    };
+    
+    const englishDay = dayMapping[dayOfWeek];
+    console.log('🔍 [generateAvailableSlots] English day:', englishDay);
+    console.log('🔍 [generateAvailableSlots] Opening hours:', location.opening_hours);
+    
+    const openingHours = location.opening_hours?.[englishDay];
+    console.log('🔍 [generateAvailableSlots] Day opening hours:', openingHours);
+    
+    if (!openingHours || openingHours.closed) {
+      console.log('🔍 [generateAvailableSlots] Location closed on', dayOfWeek);
+      return slots;
+    }
+
+    const startTime = openingHours.open;
+    const endTime = openingHours.close;
+    console.log('🔍 [generateAvailableSlots] Start time:', startTime, 'End time:', endTime);
+    
+    // Convertir les heures en minutes pour faciliter les calculs
+    const startMinutes = timeToMinutes(startTime);
+    const endMinutes = timeToMinutes(endTime);
+    console.log('🔍 [generateAvailableSlots] Start minutes:', startMinutes, 'End minutes:', endMinutes);
+    
+    // Générer des créneaux de 30 minutes
+    for (let minutes = startMinutes; minutes < endMinutes; minutes += 30) {
+      const timeString = minutesToTime(minutes);
+      const slotDateTime = new Date(appointmentDate);
+      const [hours, mins] = timeString.split(':').map(Number);
+      slotDateTime.setHours(hours, mins, 0, 0);
+      
+      slots.push({
+        id: `${location.id}-${date}-${timeString}`,
+        time: timeString,
+        date: date,
+        locationId: location.id,
+        locationName: location.name,
+        available: true,
+        slotDateTime: slotDateTime.toISOString()
+      });
+    }
+    
+    console.log('🔍 [generateAvailableSlots] Generated', slots.length, 'slots');
+    return slots;
+  } catch (error) {
+    console.error('❌ [generateAvailableSlots] Error:', error);
+    return [];
   }
-  
-  return slots;
 }
 
 /**

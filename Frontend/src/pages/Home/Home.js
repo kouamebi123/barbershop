@@ -9,6 +9,8 @@ import LocationsPreview from '../../components/LocationsPreview/LocationsPreview
 import Testimonials from '../../components/Testimonials/Testimonials';
 import CTA from '../../components/CTA/CTA';
 
+import { FEATURES, STATS, VALUES } from '../../constants';
+
 import {
   HomeContainer,
   Section,
@@ -27,30 +29,13 @@ import {
 } from './Home.styles';
 
 const Home = () => {
-  const features = [
-    {
-      icon: <FaStar />,
-      title: 'Qualité Premium',
-      description: 'Des services de haute qualité avec des produits professionnels et une expertise reconnue.'
-    },
-    {
-      icon: <FaClock />,
-      title: 'Réservation Facile',
-      description: 'Réservez votre créneau en quelques clics, 24h/24, depuis votre smartphone ou ordinateur.'
-    },
-    {
-      icon: <FaMapMarkerAlt />,
-      title: 'Multi-Adresses',
-      description: 'Plusieurs adresses pour vous offrir plus de flexibilité et de proximité.'
-    }
-  ];
+  // Utilisation des constantes importées
+  const features = FEATURES.map(feature => ({
+    ...feature,
+    icon: <FaStar /> // Remplacer par l'icône appropriée selon le type
+  }));
 
-  const stats = [
-    { number: '500+', label: 'Clients satisfaits' },
-    { number: '3', label: 'Adresses disponibles' },
-    { number: '5', label: 'Années d\'expérience' },
-    { number: '98%', label: 'Taux de satisfaction' }
-  ];
+  const stats = STATS;
 
   return (
     <HomeContainer>

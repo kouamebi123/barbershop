@@ -1,4 +1,4 @@
-const { Testimonial, Service, Location, Barber, Admin } = require('../models');
+const { Testimonial, Service, Location, Admin } = require('../models');
 const BaseController = require('./BaseController');
 const { Op } = require('sequelize');
 const Joi = require('joi');
@@ -15,7 +15,6 @@ class TestimonialController extends BaseController {
       comment: Joi.string().min(10).max(1000).required(),
       serviceId: Joi.string().uuid().optional(),
       locationId: Joi.string().uuid().optional(),
-      barberId: Joi.string().uuid().optional()
     });
 
     // Schéma de validation pour la mise à jour du statut
@@ -30,10 +29,10 @@ class TestimonialController extends BaseController {
    */
   static async getAll(req, res) {
     try {
-      const { page = 1, limit = 10, rating, serviceId, locationId, barberId } = req.query;
+      const { page = 1, limit = 10, rating, serviceId, locationId } = req.query;
       const offset = (page - 1) * limit;
 
-      console.log('🔍 [TestimonialController] getAll - Query params:', { page, limit, rating, serviceId, locationId, barberId });
+      console.log('🔍 [TestimonialController] getAll - Query params:', { page, limit, rating, serviceId, locationId });
 
       // Construire les conditions de recherche
       const whereConditions = { 
@@ -53,9 +52,6 @@ class TestimonialController extends BaseController {
         whereConditions.locationId = locationId;
       }
       
-      if (barberId) {
-        whereConditions.barberId = barberId;
-      }
 
       console.log('🔍 [TestimonialController] getAll - Where conditions:', whereConditions);
 
@@ -96,10 +92,10 @@ class TestimonialController extends BaseController {
    */
   static async getAllAdmin(req, res) {
     try {
-      const { page = 1, limit = 10, status, rating, serviceId, locationId, barberId } = req.query;
+      const { page = 1, limit = 10, status, rating, serviceId, locationId } = req.query;
       const offset = (page - 1) * limit;
 
-      console.log('🔍 [TestimonialController] getAllAdmin - Query params:', { page, limit, status, rating, serviceId, locationId, barberId });
+      console.log('🔍 [TestimonialController] getAllAdmin - Query params:', { page, limit, status, rating, serviceId, locationId });
 
       // Construire les conditions de recherche
       const whereConditions = {};
@@ -120,9 +116,6 @@ class TestimonialController extends BaseController {
         whereConditions.locationId = locationId;
       }
       
-      if (barberId) {
-        whereConditions.barberId = barberId;
-      }
 
       console.log('🔍 [TestimonialController] getAllAdmin - Where conditions:', whereConditions);
 
@@ -162,7 +155,7 @@ class TestimonialController extends BaseController {
         return BaseController.error(res, 'Données invalides', 400, error.details[0].message);
       }
 
-      const { customerName, customerEmail, rating, comment, serviceId, locationId, barberId } = value;
+      const { customerName, customerEmail, rating, comment, serviceId, locationId } = value;
 
       // Vérifier que les références existent si fournies
       if (serviceId) {
@@ -179,12 +172,6 @@ class TestimonialController extends BaseController {
         }
       }
 
-      if (barberId) {
-        const barber = await Barber.findByPk(barberId);
-        if (!barber) {
-          return BaseController.error(res, 'Coiffeur non trouvé', 404);
-        }
-      }
 
       // Créer le témoignage
       const testimonial = await Testimonial.create({
@@ -194,7 +181,6 @@ class TestimonialController extends BaseController {
         comment,
         serviceId: serviceId || null,
         locationId: locationId || null,
-        barberId: barberId || null,
         status: 'pending'
       });
 

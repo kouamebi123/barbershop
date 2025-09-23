@@ -1,5 +1,5 @@
 const cron = require('node-cron');
-const { Booking, Location, Barber, Service } = require('../models');
+const { Booking, Location, Service } = require('../models');
 const notificationService = require('./notificationService');
 const moment = require('moment');
 
@@ -79,11 +79,6 @@ class SchedulerService {
             attributes: ['name', 'address', 'city', 'phone']
           },
           {
-            model: Barber,
-            as: 'barber',
-            attributes: ['firstName', 'lastName']
-          },
-          {
             model: Service,
             as: 'services',
             attributes: ['name', 'price']
@@ -137,11 +132,6 @@ class SchedulerService {
             model: Location,
             as: 'location',
             attributes: ['name', 'address', 'city', 'phone']
-          },
-          {
-            model: Barber,
-            as: 'barber',
-            attributes: ['firstName', 'lastName']
           },
           {
             model: Service,

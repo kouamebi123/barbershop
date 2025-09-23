@@ -14,7 +14,6 @@ export const BookingProvider = ({ children }) => {
   const [bookingState, setBookingState] = useState({
     selectedLocation: '',
     selectedServices: [],
-    selectedBarber: '',
     selectedDate: '',
     selectedTime: '',
     customerFirstName: '',
@@ -38,7 +37,6 @@ export const BookingProvider = ({ children }) => {
     setBookingState({
       selectedLocation: '',
       selectedServices: [],
-      selectedBarber: '',
       selectedDate: '',
       selectedTime: '',
       customerFirstName: '',

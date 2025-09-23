@@ -11,10 +11,10 @@ const auth = async (req, res, next) => {
       });
     }
 
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'your-secret-key');
     
     // Vérifier que l'admin existe toujours et est actif
-    const admin = await Admin.findByPk(decoded.adminId);
+    const admin = await Admin.findByPk(decoded.id);
     if (!admin || !admin.isActive) {
       return res.status(401).json({
         error: 'Token invalide ou compte désactivé'

@@ -112,7 +112,7 @@ class ServiceController extends BaseController {
         name: cat.category.charAt(0).toUpperCase() + cat.category.slice(1)
       }));
 
-      return this.success(res, categoryList, 'Catégories récupérées avec succès');
+      return BaseController.success(res, categoryList, 'Catégories récupérées avec succès');
 
     } catch (error) {
       return BaseController.error(res, 'Erreur lors de la récupération des catégories', 500, error);
@@ -140,7 +140,7 @@ class ServiceController extends BaseController {
         return this.notFound(res, 'Service');
       }
 
-      return this.success(res, service, 'Service récupéré avec succès');
+      return BaseController.success(res, service, 'Service récupéré avec succès');
 
     } catch (error) {
       return BaseController.error(res, 'Erreur lors de la récupération du service', 500, error);
@@ -176,7 +176,7 @@ class ServiceController extends BaseController {
 
       const service = await Service.create(serviceData);
 
-      return this.success(res, service, 'Service créé avec succès', 201);
+      return BaseController.success(res, service, 'Service créé avec succès', 201);
 
     } catch (error) {
       if (error.name === 'SequelizeValidationError') {
@@ -224,7 +224,7 @@ class ServiceController extends BaseController {
 
       await service.update(updateData);
 
-      return this.success(res, service, 'Service mis à jour avec succès');
+      return BaseController.success(res, service, 'Service mis à jour avec succès');
 
     } catch (error) {
       if (error.name === 'SequelizeValidationError') {
@@ -259,7 +259,7 @@ class ServiceController extends BaseController {
 
       await service.destroy();
 
-      return this.success(res, null, 'Service supprimé avec succès');
+      return BaseController.success(res, null, 'Service supprimé avec succès');
 
     } catch (error) {
       return BaseController.error(res, 'Erreur lors de la suppression du service', 500, error);
@@ -282,7 +282,7 @@ class ServiceController extends BaseController {
 
       await service.update({ isActive });
 
-      return this.success(res, service, `Service ${isActive ? 'activé' : 'désactivé'} avec succès`);
+      return BaseController.success(res, service, `Service ${isActive ? 'activé' : 'désactivé'} avec succès`);
 
     } catch (error) {
       return BaseController.error(res, 'Erreur lors de la modification du statut du service', 500, error);
@@ -311,7 +311,7 @@ class ServiceController extends BaseController {
         order: [['price', 'ASC']]
       });
 
-      return this.success(res, services, `Services de la catégorie ${category} récupérés avec succès`);
+      return BaseController.success(res, services, `Services de la catégorie ${category} récupérés avec succès`);
 
     } catch (error) {
       return BaseController.error(res, 'Erreur lors de la récupération des services par catégorie', 500, error);
@@ -340,7 +340,7 @@ class ServiceController extends BaseController {
         order: [['category', 'ASC'], ['price', 'ASC']]
       });
 
-      return this.success(res, services, 'Services de la location récupérés avec succès');
+      return BaseController.success(res, services, 'Services de la location récupérés avec succès');
 
     } catch (error) {
       return BaseController.error(res, 'Erreur lors de la récupération des services par location', 500, error);

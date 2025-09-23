@@ -36,7 +36,7 @@ const Service = sequelize.define('Service', {
     }
   },
   category: {
-    type: DataTypes.ENUM('coupe', 'barbe', 'soins', 'combo'),
+    type: DataTypes.ENUM('coupe', 'barbe', 'soins', 'combo', 'coloration'),
     allowNull: false,
     defaultValue: 'coupe'
   },
@@ -48,10 +48,6 @@ const Service = sequelize.define('Service', {
     type: DataTypes.STRING(500),
     allowNull: true
   },
-  requiresBarber: {
-    type: DataTypes.BOOLEAN,
-    defaultValue: true
-  },
   maxConcurrentBookings: {
     type: DataTypes.INTEGER,
     defaultValue: 1,
@@ -59,6 +55,16 @@ const Service = sequelize.define('Service', {
       min: 1,
       max: 10
     }
+  },
+  gender: {
+    type: DataTypes.ENUM('homme', 'femme', 'unisex'),
+    allowNull: false,
+    defaultValue: 'unisex'
+  },
+  haircut_type: {
+    type: DataTypes.STRING(50),
+    allowNull: true,
+    comment: 'Type de coupe: coupe_homme, coupe_femme, coupe_unisex, barbe, coloration, soin'
   }
 }, {
   tableName: 'services',

@@ -3,7 +3,7 @@ import { Helmet } from 'react-helmet-async';
 import { motion } from 'framer-motion';
 import { FaStar, FaAward, FaUsers, FaClock, FaHeart, FaSpinner } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
-import { barbersAPI } from '../../services/api';
+import { ABOUT_HERO, ABOUT_STATS, ABOUT_VALUES, ABOUT_STORY, TEAM_SECTION, MISSION_VISION } from '../../constants';
 
 import {
   AboutContainer,
@@ -44,58 +44,20 @@ import {
 } from './About.styles';
 
 const About = () => {
-  const [barbers, setBarbers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   useEffect(() => {
-    const fetchBarbers = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        
-        const response = await barbersAPI.getAll();
-        setBarbers(response.data.data?.barbers || []);
-      } catch (err) {
-        console.error('Erreur lors du chargement des coiffeurs:', err);
-        setError('Impossible de charger les informations de l\'équipe. Veuillez réessayer plus tard.');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchBarbers();
+    // Plus besoin de charger les coiffeurs
+    setLoading(false);
   }, []);
 
-  const stats = [
-    { number: '500+', label: 'Clients satisfaits' },
-    { number: '5+', label: 'Années d\'expérience' },
-    { number: '3', label: 'Salons à Rennes' },
-    { number: '15+', label: 'Coiffeurs professionnels' }
-  ];
+  const stats = ABOUT_STATS;
 
-  const values = [
-    {
-      icon: <FaHeart />,
-      title: 'Passion',
-      description: 'Nous sommes passionnés par notre métier et nous nous efforçons de vous offrir le meilleur service possible.'
-    },
-    {
-      icon: <FaAward />,
-      title: 'Excellence',
-      description: 'Nous visons l\'excellence dans chaque coupe, chaque taille de barbe et chaque service que nous proposons.'
-    },
-    {
-      icon: <FaUsers />,
-      title: 'Communauté',
-      description: 'Nous créons un espace où chacun se sent bienvenu et où la communauté se retrouve.'
-    },
-    {
-      icon: <FaClock />,
-      title: 'Ponctualité',
-      description: 'Nous respectons votre temps et nous nous efforçons d\'être toujours à l\'heure pour vos rendez-vous.'
-    }
-  ];
+  const values = ABOUT_VALUES.map(value => ({
+    ...value,
+    icon: <FaHeart /> // Remplacer par l'icône appropriée selon le type
+  }));
 
   return (
     <AboutContainer>
@@ -115,7 +77,7 @@ const About = () => {
           >
             <HeroTitle>À Propos de Nous</HeroTitle>
             <HeroSubtitle>
-              Découvrez l'histoire de notre barbershop et notre passion pour l'art de la coiffure masculine
+              Découvrez l'histoire de notre barbershop et notre passion pour l'art de la coiffure
             </HeroSubtitle>
           </motion.div>
         </HeroContent>
@@ -132,7 +94,7 @@ const About = () => {
           >
             <SectionTitle>Notre Histoire</SectionTitle>
             <SectionSubtitle>
-              Depuis 2018, notre barbershop redéfinit l'art de la coiffure masculine
+              Depuis 2018, notre barbershop redéfinit l'art de la coiffure
             </SectionSubtitle>
 
             <AboutContent>
@@ -233,44 +195,31 @@ const About = () => {
               </ErrorMessage>
             ) : (
               <TeamGrid>
-                {barbers.map((barber, index) => (
-                  <motion.div
-                    key={barber.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    whileInView={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.6, delay: index * 0.1 }}
-                    viewport={{ once: true }}
-                  >
-                    <TeamCard>
-                      <TeamImage>
-                        <img 
-                          src={barber.avatar || `https://via.placeholder.com/300x300?text=${barber.firstName}+${barber.lastName}`} 
-                          alt={`${barber.firstName} ${barber.lastName}`}
-                          onError={(e) => {
-                            e.target.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTUwIiBjeT0iMTUwIiByPSIxNTAiIGZpbGw9IiNmOGY5ZmEiLz48dGV4dCB4PSIxNTAiIHk9IjE1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0Ij5BdmF0YXI8L3RleHQ+PC9zdmc+';
-                          }}
-                        />
-                      </TeamImage>
-                      <TeamInfo>
-                        <TeamName>{barber.firstName} {barber.lastName}</TeamName>
-                        <TeamRole>Coiffeur Professionnel</TeamRole>
-                        <TeamSpecialties>
-                          {barber.specializations?.join(', ') || 'Spécialiste polyvalent'}
-                        </TeamSpecialties>
-                        <TeamBio>
-                          {barber.bio || 'Passionné par son métier, il met tout son savoir-faire au service de votre style.'}
-                        </TeamBio>
-                        <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginTop: '1rem' }}>
-                          <FaStar style={{ color: '#d4af37' }} />
-                          <span>{barber.rating || 'Nouveau'}</span>
-                          <span style={{ color: '#666', marginLeft: '0.5rem' }}>
-                            • {barber.totalBookings || 0} réservations
-                          </span>
-                        </div>
-                      </TeamInfo>
-                    </TeamCard>
-                  </motion.div>
-                ))}
+                <motion.div
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.6 }}
+                  viewport={{ once: true }}
+                >
+                  <TeamCard>
+                    <TeamImage>
+                      <img 
+                        src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjMwMCIgdmlld0JveD0iMCAwIDMwMCAzMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PGNpcmNsZSBjeD0iMTUwIiBjeT0iMTUwIiByPSIxNTAiIGZpbGw9IiNmOGY5ZmEiLz48dGV4dCB4PSIxNTAiIHk9IjE1MCIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0iIzY2NiIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0Ij5FcXVpcGU8L3RleHQ+PC9zdmc+"
+                        alt="Notre équipe"
+                      />
+                    </TeamImage>
+                    <TeamInfo>
+                      <TeamName>Notre Équipe</TeamName>
+                      <TeamRole>Professionnels de la Coiffure</TeamRole>
+                      <TeamSpecialties>
+                        Coiffure moderne, Coupes tendance, Soins capillaires
+                      </TeamSpecialties>
+                      <TeamBio>
+                        Notre équipe de professionnels passionnés met tout son savoir-faire au service de votre style et de votre bien-être.
+                      </TeamBio>
+                    </TeamInfo>
+                  </TeamCard>
+                </motion.div>
               </TeamGrid>
             )}
           </motion.div>

@@ -9,12 +9,7 @@ import {
   FaChartLine, 
   FaSignOutAlt, 
   FaSpinner,
-  FaEye,
-  FaEdit,
-  FaTrash,
   FaDownload,
-  FaFilter,
-  FaSearch,
   FaPlus,
   FaClock,
   FaCheckCircle,
@@ -26,7 +21,11 @@ import { toast } from 'react-toastify';
 import moment from 'moment';
 import 'moment/locale/fr';
 
-import { adminAPI, authAPI } from '../../services/api';
+import { adminAPI } from '../../services/api';
+import { ADMIN_DASHBOARD, ADMIN_ACTIONS, ADMIN_STATUS } from '../../constants';
+import { useAuth } from '../../contexts/AuthContext';
+import AdminNavbar from '../../components/AdminNavbar/AdminNavbar';
+import BookingActions from '../../components/BookingActions/BookingActions';
 
 import {
   DashboardContainer,
@@ -47,20 +46,11 @@ import {
   CardHeader,
   CardTitle,
   CardAction,
-  Table,
-  TableHeader,
-  TableRow,
-  TableCell,
-  TableHeaderCell,
   StatusBadge,
   ActionButton,
-  ButtonGroup,
-  SearchInput,
-  FilterSelect,
   LoadingSpinner,
   ErrorMessage,
   EmptyState,
-  ChartContainer,
   RecentBookings,
   BookingItem,
   BookingInfo,
@@ -75,31 +65,31 @@ import {
 moment.locale('fr');
 
 const AdminDashboard = () => {
+  const navigate = useNavigate();
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const [dashboardData, setDashboardData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('all');
-  const [currentPage, setCurrentPage] = useState(1);
-  const navigate = useNavigate();
 
-  // Vérifier l'authentification
+  // Protection d'authentification
   useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (!token) {
+    if (!authLoading && !isAuthenticated) {
+      console.log('🔍 [AdminDashboard] Not authenticated, redirecting to login');
       navigate('/admin/login');
-      return;
     }
-  }, [navigate]);
+  }, [isAuthenticated, authLoading, navigate]);
 
   // Charger les données du tableau de bord
   useEffect(() => {
+    if (!isAuthenticated || authLoading) return;
+    
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
         setError(null);
         const response = await adminAPI.getDashboardStats();
-        setDashboardData(response.data);
+        console.log('🔍 [AdminDashboard] API Response:', response.data);
+        setDashboardData(response.data.data || response.data);
       } catch (err) {
         console.error('Erreur lors du chargement du tableau de bord:', err);
         setError('Impossible de charger les données du tableau de bord.');
@@ -110,25 +100,63 @@ const AdminDashboard = () => {
     };
 
     fetchDashboardData();
-  }, []);
+  }, [isAuthenticated, authLoading]);
 
-  const handleLogout = async () => {
-    try {
-      localStorage.removeItem('token');
-      localStorage.removeItem('admin');
-      toast.success('Déconnexion réussie');
-      navigate('/admin/login');
-    } catch (err) {
-      console.error('Erreur lors de la déconnexion:', err);
-      toast.error('Erreur lors de la déconnexion');
-    }
+
+  const handleBookingStatusUpdate = (bookingId, newStatus) => {
+    setDashboardData(prevData => ({
+      ...prevData,
+      recentBookings: prevData.recentBookings.map(booking => 
+        booking.id === bookingId 
+          ? { ...booking, status: newStatus }
+          : booking
+      ),
+      bookingsByStatus: {
+        ...prevData.bookingsByStatus,
+        [newStatus]: (prevData.bookingsByStatus[newStatus] || 0) + 1,
+        [prevData.recentBookings.find(b => b.id === bookingId)?.status]: 
+          (prevData.bookingsByStatus[prevData.recentBookings.find(b => b.id === bookingId)?.status] || 1) - 1
+      }
+    }));
   };
+
+  const handleViewBooking = (booking) => {
+    // TODO: Implémenter la vue détaillée
+    console.log('Voir réservation:', booking);
+    toast.info('Fonctionnalité en cours de développement');
+  };
+
+  const handleEditBooking = (booking) => {
+    // TODO: Implémenter l'édition
+    console.log('Éditer réservation:', booking);
+    toast.info('Fonctionnalité en cours de développement');
+  };
+
+  // Afficher un loader pendant la vérification d'authentification
+  if (authLoading) {
+    console.log('🔍 [AdminDashboard] Auth loading...');
+    return (
+      <DashboardContainer>
+        <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
+          <FaSpinner className="fa-spin" size={32} />
+        </div>
+      </DashboardContainer>
+    );
+  }
+
+  // Rediriger si pas authentifié
+  if (!isAuthenticated) {
+    console.log('🔍 [AdminDashboard] Not authenticated, returning null');
+    return null;
+  }
+
+  console.log('🔍 [AdminDashboard] Authenticated, rendering dashboard');
 
   const handleExportBookings = async () => {
     try {
       const response = await adminAPI.exportBookings({
-        status: statusFilter !== 'all' ? statusFilter : undefined,
-        search: searchTerm || undefined
+        status: undefined,
+        search: undefined
       });
       
       // Créer un lien de téléchargement
@@ -150,10 +178,10 @@ const AdminDashboard = () => {
 
   const getStatusBadge = (status) => {
     const statusConfig = {
-      confirmed: { color: '#28a745', icon: FaCheckCircle, text: 'Confirmé' },
-      pending: { color: '#ffc107', icon: FaClock, text: 'En attente' },
-      cancelled: { color: '#dc3545', icon: FaTimesCircle, text: 'Annulé' },
-      completed: { color: '#17a2b8', icon: FaCheckCircle, text: 'Terminé' }
+      confirmed: { color: '#28a745', icon: FaCheckCircle, text: ADMIN_STATUS.confirmed },
+      pending: { color: '#ffc107', icon: FaClock, text: ADMIN_STATUS.pending },
+      cancelled: { color: '#dc3545', icon: FaTimesCircle, text: ADMIN_STATUS.cancelled },
+      completed: { color: '#17a2b8', icon: FaCheckCircle, text: ADMIN_STATUS.completed }
     };
     
     const config = statusConfig[status] || statusConfig.pending;
@@ -209,36 +237,31 @@ const AdminDashboard = () => {
     totalBookings,
     totalRevenue,
     totalCustomers,
-    totalBarbers,
     recentBookings,
     bookingsByStatus,
-    monthlyRevenue,
-    topBarbers
   } = dashboardData;
 
   return (
-    <DashboardContainer>
-      <Helmet>
-        <title>Tableau de Bord Admin - Barbershop Rennes</title>
-        <meta name="description" content="Tableau de bord d'administration pour la gestion du barbershop" />
-        <meta name="robots" content="noindex, nofollow" />
-      </Helmet>
+    <>
+      <AdminNavbar />
+      <DashboardContainer>
+        <Helmet>
+          <title>{ADMIN_DASHBOARD.title}</title>
+          <meta name="description" content={ADMIN_DASHBOARD.description} />
+          <meta name="robots" content="noindex, nofollow" />
+        </Helmet>
 
-      {/* Header */}
-      <DashboardHeader>
-        <HeaderContent>
-          <div>
-            <HeaderTitle>Tableau de Bord</HeaderTitle>
-            <HeaderSubtitle>
-              Bienvenue dans l'espace d'administration
-            </HeaderSubtitle>
-          </div>
-          <LogoutButton onClick={handleLogout}>
-            <FaSignOutAlt />
-            Déconnexion
-          </LogoutButton>
-        </HeaderContent>
-      </DashboardHeader>
+        {/* Header */}
+        <DashboardHeader>
+          <HeaderContent>
+            <div>
+              <HeaderTitle>{ADMIN_DASHBOARD.title}</HeaderTitle>
+              <HeaderSubtitle>
+                {ADMIN_DASHBOARD.subtitle}
+              </HeaderSubtitle>
+            </div>
+          </HeaderContent>
+        </DashboardHeader>
 
       <DashboardContent>
         {/* Statistiques principales */}
@@ -253,7 +276,7 @@ const AdminDashboard = () => {
                 <FaCalendarAlt />
               </StatIcon>
               <StatValue>{totalBookings}</StatValue>
-              <StatLabel>Réservations</StatLabel>
+              <StatLabel>{ADMIN_DASHBOARD.stats.totalBookings.title}</StatLabel>
               <StatChange positive>+12% ce mois</StatChange>
             </StatCard>
           </motion.div>
@@ -268,7 +291,7 @@ const AdminDashboard = () => {
                 <FaChartLine />
               </StatIcon>
               <StatValue>{totalRevenue}€</StatValue>
-              <StatLabel>Chiffre d'affaires</StatLabel>
+              <StatLabel>{ADMIN_DASHBOARD.stats.totalRevenue.title}</StatLabel>
               <StatChange positive>+8% ce mois</StatChange>
             </StatCard>
           </motion.div>
@@ -283,7 +306,7 @@ const AdminDashboard = () => {
                 <FaUsers />
               </StatIcon>
               <StatValue>{totalCustomers}</StatValue>
-              <StatLabel>Clients</StatLabel>
+              <StatLabel>{ADMIN_DASHBOARD.stats.totalClients.title}</StatLabel>
               <StatChange positive>+5% ce mois</StatChange>
             </StatCard>
           </motion.div>
@@ -297,8 +320,7 @@ const AdminDashboard = () => {
               <StatIcon color="#6f42c1">
                 <FaCut />
               </StatIcon>
-              <StatValue>{totalBarbers}</StatValue>
-              <StatLabel>Coiffeurs</StatLabel>
+              <StatLabel>{ADMIN_DASHBOARD.stats.totalLocations.title}</StatLabel>
               <StatChange>Actifs</StatChange>
             </StatCard>
           </motion.div>
@@ -314,11 +336,11 @@ const AdminDashboard = () => {
           >
             <ContentCard>
               <CardHeader>
-                <CardTitle>Réservations Récentes</CardTitle>
+                <CardTitle>{ADMIN_DASHBOARD.sections.recentBookings.title}</CardTitle>
                 <CardAction>
                   <ActionButton onClick={handleExportBookings}>
                     <FaDownload />
-                    Exporter
+                    {ADMIN_ACTIONS.export}
                   </ActionButton>
                 </CardAction>
               </CardHeader>
@@ -332,10 +354,16 @@ const AdminDashboard = () => {
                           <strong>{booking.customerFirstName} {booking.customerLastName}</strong>
                           <div>{booking.serviceName}</div>
                           <div>{moment(booking.appointmentDate).format('DD/MM/YYYY')} à {booking.appointmentTime}</div>
+                          <div style={{ fontSize: '12px', color: '#666', marginTop: '4px' }}>
+                            {booking.locationName}
+                          </div>
                         </div>
-                        <BookingStatus>
-                          {getStatusBadge(booking.status)}
-                        </BookingStatus>
+                        <BookingActions
+                          booking={booking}
+                          onStatusUpdate={handleBookingStatusUpdate}
+                          onView={handleViewBooking}
+                          onEdit={handleEditBooking}
+                        />
                       </BookingInfo>
                     </BookingItem>
                   ))
@@ -420,18 +448,17 @@ const AdminDashboard = () => {
               {/* Top coiffeurs */}
               <div>
                 <h4>Top Coiffeurs</h4>
-                {topBarbers && topBarbers.map((barber, index) => (
-                  <div key={barber.id} style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                    <span>{barber.firstName} {barber.lastName}</span>
-                    <span>{barber.totalBookings} réservations</span>
-                  </div>
-                ))}
+                <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                  <span>Services populaires</span>
+                  <span>En cours de développement</span>
+                </div>
               </div>
             </div>
           </ContentCard>
         </motion.div>
       </DashboardContent>
-    </DashboardContainer>
+      </DashboardContainer>
+    </>
   );
 };
 

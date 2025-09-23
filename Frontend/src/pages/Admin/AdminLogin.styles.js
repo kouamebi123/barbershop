@@ -115,6 +115,31 @@ export const PasswordInput = styled.div`
   position: relative;
   display: flex;
   align-items: center;
+  
+  input {
+    width: 100%;
+    padding: 1rem 3rem 1rem 1rem;
+    border: 2px solid #e0e0e0;
+    border-radius: 12px;
+    font-size: 1rem;
+    background: #fff;
+    transition: all 0.3s ease;
+    outline: none;
+
+    &:focus {
+      border-color: #d4af37;
+      box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+    }
+
+    &::placeholder {
+      color: #999;
+    }
+
+    &:disabled {
+      background: #f5f5f5;
+      cursor: not-allowed;
+    }
+  }
 `;
 
 export const PasswordToggle = styled.button`

@@ -31,16 +31,16 @@ app.use(express.urlencoded({ extended: true }));
 
 // Routes
 app.use('/api/auth', require('./routes/auth'));
+app.use('/api/bookings/availability', require('./routes/availability'));
 app.use('/api/bookings', require('./routes/bookings'));
 app.use('/api/locations', require('./routes/locations'));
 app.use('/api/services', require('./routes/services'));
-app.use('/api/barbers', require('./routes/barbers'));
 app.use('/api/admin', require('./routes/admin'));
 app.use('/api/stats', require('./routes/stats'));
 app.use('/api/contact', require('./routes/contact'));
 app.use('/api/health', require('./routes/health'));
 app.use('/api/testimonials', require('./routes/testimonials'));
-app.use('/api/bookings/availability', require('./routes/availability'));
+app.use('/api/gender', require('./routes/gender'));
 
 // Gestion des erreurs 404
 app.use('*', (req, res) => {

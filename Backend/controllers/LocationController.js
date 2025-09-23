@@ -1,4 +1,4 @@
-const { Location, Barber, Service } = require('../models');
+const { Location, Service } = require('../models');
 const BaseController = require('./BaseController');
 const { Op } = require('sequelize');
 
@@ -38,13 +38,6 @@ class LocationController extends BaseController {
         where: whereConditions,
         include: [
           {
-            model: Barber,
-            as: 'barbers',
-            where: { isActive: true },
-            required: false,
-            through: { attributes: [] }
-          },
-          {
             model: Service,
             as: 'services',
             where: { isActive: true },
@@ -61,7 +54,6 @@ class LocationController extends BaseController {
         id: locations[0].id,
         name: locations[0].name,
         isActive: locations[0].isActive,
-        barbersCount: locations[0].barbers ? locations[0].barbers.length : 0,
         servicesCount: locations[0].services ? locations[0].services.length : 0
       } : 'No locations found');
 
@@ -94,13 +86,6 @@ class LocationController extends BaseController {
 
       const location = await Location.findByPk(id, {
         include: [
-          {
-            model: Barber,
-            as: 'barbers',
-            where: { isActive: true },
-            required: false,
-            through: { attributes: [] }
-          },
           {
             model: Service,
             as: 'services',
@@ -250,12 +235,6 @@ class LocationController extends BaseController {
       const location = await Location.findByPk(id, {
         include: [
           {
-            model: Barber,
-            as: 'barbers',
-            where: { isActive: true },
-            required: false
-          },
-          {
             model: Service,
             as: 'services',
             where: { isActive: true },
@@ -269,7 +248,6 @@ class LocationController extends BaseController {
       }
 
       const stats = {
-        totalBarbers: location.barbers.length,
         totalServices: location.services.length,
         // Ajouter d'autres statistiques selon les besoins
       };

@@ -419,3 +419,70 @@ export const LoadingSpinner = styled.div`
   padding: 2rem;
   color: #666;
 `;
+
+// Nouveaux styles pour les indicateurs de progression
+export const StepIndicator = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 40px;
+  position: relative;
+  padding: 0 20px;
+`;
+
+export const ProgressBar = styled.div`
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  right: 20px;
+  height: 4px;
+  background: #e5e7eb;
+  border-radius: 2px;
+  z-index: 1;
+`;
+
+export const ProgressFill = styled.div`
+  height: 100%;
+  background: linear-gradient(90deg, #d4af37, #f4d03f);
+  border-radius: 2px;
+  transition: width 0.3s ease;
+  width: ${props => props.$progress}%;
+`;
+
+export const StepNumber = styled.div`
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: ${props => props.$isActive ? '#d4af37' : '#e5e7eb'};
+  color: ${props => props.$isActive ? 'white' : '#6b7280'};
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+`;
+
+export const StepLabel = styled.div`
+  margin-top: 8px;
+  font-size: 12px;
+  font-weight: 500;
+  color: ${props => props.$isActive ? '#d4af37' : '#6b7280'};
+  text-align: center;
+  transition: color 0.3s ease;
+`;
+
+export const NavigationButtons = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 40px;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    gap: 15px;
+  }
+`;

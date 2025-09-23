@@ -17,19 +17,35 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    const token = localStorage.getItem('token');
+    console.log('🔍 [AuthContext] Initializing auth context...');
+    const rawToken = localStorage.getItem('token');
+    // Normaliser le token: éviter la chaîne 'undefined' enregistrée par erreur
+    const token = rawToken && rawToken !== 'undefined' ? rawToken : null;
     const adminData = localStorage.getItem('admin');
+    
+    console.log('🔍 [AuthContext] Token exists:', !!token);
+    console.log('🔍 [AuthContext] Admin data exists:', !!adminData);
+    
+    // Nettoyer le localStorage si les données sont incohérentes
+    if (!token && adminData) {
+      console.log('🔍 [AuthContext] Cleaning inconsistent localStorage data');
+      localStorage.removeItem('admin');
+    }
     
     if (token && adminData) {
       try {
         const admin = JSON.parse(adminData);
+        console.log('🔍 [AuthContext] Parsed admin data:', admin);
         setUser(admin);
         setIsAuthenticated(true);
+        console.log('🔍 [AuthContext] User authenticated');
       } catch (error) {
         console.error('Error parsing admin data:', error);
         localStorage.removeItem('token');
         localStorage.removeItem('admin');
       }
+    } else {
+      console.log('🔍 [AuthContext] No token or admin data found');
     }
     setLoading(false);
   }, []);
@@ -37,7 +53,14 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const response = await authAPI.login(credentials);
-      const { token, admin } = response.data;
+      // Les réponses backend sont enveloppées: { success, message, data: { token, admin } }
+      const payload = response?.data?.data || response?.data;
+      const token = payload?.token;
+      const admin = payload?.admin;
+
+      if (!token || !admin) {
+        throw new Error("Réponse de connexion invalide");
+      }
       
       localStorage.setItem('token', token);
       localStorage.setItem('admin', JSON.stringify(admin));
@@ -50,12 +73,21 @@ export const AuthProvider = ({ children }) => {
       console.error('Login error:', error);
       return { 
         success: false, 
-        error: error.response?.data?.error || 'Erreur de connexion' 
+        error: error.response?.data?.error || error.message || 'Erreur de connexion' 
       };
     }
   };
 
   const logout = () => {
+    console.log('🔍 [AuthContext] Logging out...');
+    localStorage.removeItem('token');
+    localStorage.removeItem('admin');
+    setUser(null);
+    setIsAuthenticated(false);
+  };
+
+  const clearAuth = () => {
+    console.log('🔍 [AuthContext] Clearing auth data...');
     localStorage.removeItem('token');
     localStorage.removeItem('admin');
     setUser(null);
@@ -65,7 +97,8 @@ export const AuthProvider = ({ children }) => {
   const updateProfile = async (profileData) => {
     try {
       const response = await authAPI.updateProfile(profileData);
-      const updatedAdmin = response.data;
+      // Peut renvoyer { data: { admin } } selon le contrôleur
+      const updatedAdmin = response?.data?.data?.admin || response?.data?.data || response?.data;
       
       localStorage.setItem('admin', JSON.stringify(updatedAdmin));
       setUser(updatedAdmin);
@@ -86,6 +119,7 @@ export const AuthProvider = ({ children }) => {
     isAuthenticated,
     login,
     logout,
+    clearAuth,
     updateProfile
   };
 

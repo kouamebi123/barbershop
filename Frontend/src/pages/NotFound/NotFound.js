@@ -34,7 +34,7 @@ const NotFound = () => {
   return (
     <NotFoundContainer>
       <Helmet>
-        <title>Page Non Trouvée - Barbershop Rennes</title>
+        <title>Page Non Trouvée - Barbershop</title>
         <meta name="description" content="La page que vous recherchez n'existe pas. Retournez à l'accueil ou explorez nos services." />
         <meta name="robots" content="noindex, nofollow" />
       </Helmet>

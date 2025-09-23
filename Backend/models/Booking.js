@@ -12,7 +12,7 @@ const Booking = sequelize.define('Booking', {
     allowNull: false,
     validate: {
       notEmpty: true,
-      len: [2, 50]
+      len: [1, 50]
     }
   },
   customerLastName: {
@@ -20,21 +20,26 @@ const Booking = sequelize.define('Booking', {
     allowNull: false,
     validate: {
       notEmpty: true,
-      len: [2, 50]
+      len: [1, 50]
     }
   },
   customerEmail: {
     type: DataTypes.STRING(100),
     allowNull: false,
     validate: {
-      isEmail: true
+      isEmail: {
+        msg: 'Format d\'email invalide'
+      }
     }
   },
   customerPhone: {
     type: DataTypes.STRING(20),
     allowNull: false,
     validate: {
-      is: /^[\+]?[0-9\s\-\(\)]+$/
+      is: {
+        args: /^[\+]?[0-9\s\-\(\)]+$/,
+        msg: 'Format de téléphone invalide (seuls les chiffres, espaces, tirets, parenthèses et + sont autorisés)'
+      }
     }
   },
   appointmentDate: {
@@ -81,6 +86,14 @@ const Booking = sequelize.define('Booking', {
     type: DataTypes.STRING(20),
     allowNull: false,
     unique: true
+  },
+  locationId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    references: {
+      model: 'locations',
+      key: 'id'
+    }
   }
 }, {
   tableName: 'bookings',

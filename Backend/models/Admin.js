@@ -66,7 +66,6 @@ const Admin = sequelize.define('Admin', {
       manageBookings: true,
       manageLocations: true,
       manageServices: true,
-      manageBarbers: true,
       viewAnalytics: true,
       manageAdmins: false
     }

@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaArrowRight, FaPlay, FaSpinner } from 'react-icons/fa';
 import { statsAPI } from '../../services/api';
+import { HERO_DATA } from '../../constants';
 
 import {
   HeroContainer,
@@ -45,7 +46,6 @@ const Hero = () => {
         const statsData = [
           { number: `${data.totalBookings}+`, label: 'Réservations' },
           { number: data.totalLocations, label: 'Salons' },
-          { number: data.totalBarbers, label: 'Coiffeurs' }
         ];
         
         console.log('🔍 [Hero] Processed stats:', statsData);

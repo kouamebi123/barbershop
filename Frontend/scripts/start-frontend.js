@@ -7,12 +7,12 @@ console.log('🚀 Démarrage du frontend...');
 const checkBackend = async () => {
   try {
     const axios = require('axios');
-    const response = await axios.get('http://localhost:3001/api/health');
-    console.log('✅ Backend accessible sur le port 3001');
+    const response = await axios.get('http://localhost:5001/api/health');
+    console.log('✅ Backend accessible sur le port 5001');
     return true;
   } catch (error) {
-    console.log('⚠️  Backend non accessible sur le port 3001');
-    console.log('   Assurez-vous que le backend est démarré avec: cd Backend && PORT=3001 npm start');
+    console.log('⚠️  Backend non accessible sur le port 5001');
+    console.log('   Assurez-vous que le backend est démarré avec: cd Backend && PORT=5001 npm start');
     return false;
   }
 };
