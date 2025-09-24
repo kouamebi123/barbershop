@@ -18,6 +18,7 @@
     "seed": "node scripts/seed-data.js",
     "seed:production": "node scripts/seed-production.js",
     "force:testimonials": "node scripts/force-create-testimonials.js",
+    "reset:complete": "node scripts/reset-database-completely.js",
     "clean": "node scripts/clean-test-data.js",
     "reset": "node scripts/reset-database.js",
     "update-dashboard": "node scripts/update-dashboard-data.js"

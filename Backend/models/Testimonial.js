@@ -89,9 +89,6 @@ module.exports = (sequelize) => {
         fields: ['status']
       },
       {
-        fields: ['isActive']
-      },
-      {
         fields: ['rating']
       },
       {

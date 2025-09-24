@@ -1,10 +1,9 @@
 const { testConnection, sequelize } = require('../config/database');
-const { Location, Service, Booking, Admin, Testimonial } = require('../models');
-const seedProductionData = require('./seed-production');
+const { Location, Service, Admin, Testimonial, Booking } = require('../models');
 
-const startProduction = async () => {
+const resetDatabaseCompletely = async () => {
   try {
-    console.log('🚀 Démarrage de l\'application en production...');
+    console.log('🚀 Reset complet de la base de données...');
     
     // Tester la connexion à la base de données
     await testConnection();
@@ -44,16 +43,18 @@ const startProduction = async () => {
     console.log('✅ Tables créées');
     
     // Initialiser les données
+    console.log('🌱 Initialisation des données...');
+    const seedProductionData = require('./seed-production');
     await seedProductionData();
     
-    // Démarrer le serveur
-    console.log('✅ Base de données prête, démarrage du serveur...');
-    require('../server');
+    console.log('✅ Base de données complètement réinitialisée !');
+    
+    process.exit(0);
     
   } catch (error) {
-    console.error('❌ Erreur lors du démarrage:', error);
+    console.error('❌ Erreur lors du reset de la base de données:', error);
     process.exit(1);
   }
 };
 
-startProduction();
+resetDatabaseCompletely();
