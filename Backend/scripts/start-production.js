@@ -1,4 +1,5 @@
-const { testConnection } = require('../config/database');
+const { testConnection, sequelize } = require('../config/database');
+const { Location, Service, Booking, Admin, Testimonial } = require('../models');
 const seedProductionData = require('./seed-production');
 
 const startProduction = async () => {
@@ -7,6 +8,11 @@ const startProduction = async () => {
     
     // Tester la connexion à la base de données
     await testConnection();
+    
+    // Synchroniser la base de données (créer les tables si elles n'existent pas)
+    console.log('🔄 Synchronisation de la base de données...');
+    await sequelize.sync({ alter: true });
+    console.log('✅ Tables synchronisées');
     
     // Initialiser les données si nécessaire
     await seedProductionData();
