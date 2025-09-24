@@ -1,4 +1,4 @@
-const { Location, Service, Admin } = require('../models');
+const { Location, Service, Admin, Testimonial } = require('../models');
 const bcrypt = require('bcryptjs');
 
 const seedProductionData = async () => {
@@ -137,6 +137,48 @@ const seedProductionData = async () => {
     });
 
     console.log('✅ Admin par défaut créé (username: admin, password: admin123)');
+
+    // Créer des témoignages
+    const testimonials = await Testimonial.bulkCreate([
+      {
+        customerName: 'Jean Dupont',
+        customerEmail: 'jean.dupont@email.com',
+        rating: 5,
+        comment: 'Excellent service ! Le coiffeur était très professionnel et à l\'écoute. Je recommande vivement ce salon.',
+        serviceId: services[0].id,
+        locationId: locations[0].id,
+        status: 'approved'
+      },
+      {
+        customerName: 'Marie Martin',
+        customerEmail: 'marie.martin@email.com',
+        rating: 4,
+        comment: 'Très bon accueil et coupe parfaite. L\'ambiance est détendue et le personnel sympathique.',
+        serviceId: services[1].id,
+        locationId: locations[0].id,
+        status: 'approved'
+      },
+      {
+        customerName: 'Pierre Durand',
+        customerEmail: 'pierre.durand@email.com',
+        rating: 5,
+        comment: 'Service impeccable ! La taille de barbe est parfaite et le coiffeur prend le temps nécessaire.',
+        serviceId: services[2].id,
+        locationId: locations[1].id,
+        status: 'approved'
+      },
+      {
+        customerName: 'Sophie Leroy',
+        customerEmail: 'sophie.leroy@email.com',
+        rating: 4,
+        comment: 'Belle expérience dans ce salon. L\'équipe est compétente et l\'environnement agréable.',
+        serviceId: services[1].id,
+        locationId: locations[1].id,
+        status: 'approved'
+      }
+    ]);
+
+    console.log(`✅ ${testimonials.length} témoignages créés`);
 
     console.log('🎉 Données de production initialisées avec succès !');
 
