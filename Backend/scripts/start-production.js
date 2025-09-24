@@ -43,6 +43,10 @@ const startProduction = async () => {
     await sequelize.sync({ force: false });
     console.log('✅ Tables créées');
     
+    // Ajouter les index
+    const addIndexes = require('./add-indexes');
+    await addIndexes();
+    
     // Initialiser les données
     await seedProductionData();
     

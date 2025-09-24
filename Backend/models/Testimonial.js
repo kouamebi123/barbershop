@@ -83,21 +83,7 @@ module.exports = (sequelize) => {
     }
   }, {
     tableName: 'testimonials',
-    timestamps: true,
-    indexes: [
-      {
-        fields: ['status']
-      },
-      {
-        fields: ['rating']
-      },
-      {
-        fields: ['serviceId']
-      },
-      {
-        fields: ['locationId']
-      },
-    ]
+    timestamps: true
   });
 
   return Testimonial;
