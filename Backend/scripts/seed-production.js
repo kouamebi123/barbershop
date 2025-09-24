@@ -64,21 +64,8 @@ const seedProductionData = async () => {
   try {
     console.log('🌱 Initialisation des données de production...');
 
-    // Vérifier si des données existent déjà
-    const existingLocations = await Location.count();
-    const existingTestimonials = await Testimonial.count();
-    
-    if (existingLocations > 0 && existingTestimonials > 0) {
-      console.log('ℹ️  Des données existent déjà, arrêt de l\'initialisation');
-      return;
-    }
-    
-    if (existingLocations > 0 && existingTestimonials === 0) {
-      console.log('ℹ️  Locations existent, création des témoignages seulement...');
-      // Créer seulement les témoignages
-      await createTestimonialsOnly();
-      return;
-    }
+    // Avec force: true, on recrée tout, donc pas besoin de vérifier
+    console.log('ℹ️  Création de toutes les données (force mode)...');
 
     // Créer des locations
     const locations = await Location.bulkCreate([

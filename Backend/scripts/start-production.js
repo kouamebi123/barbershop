@@ -11,7 +11,7 @@ const startProduction = async () => {
     
     // Synchroniser la base de données (créer les tables si elles n'existent pas)
     console.log('🔄 Synchronisation de la base de données...');
-    await sequelize.sync({ alter: true });
+    await sequelize.sync({ force: true });
     console.log('✅ Tables synchronisées');
     
     // Initialiser les données si nécessaire
