@@ -3,7 +3,7 @@ const Location = require('./Location');
 const Service = require('./Service');
 const Booking = require('./Booking');
 const Admin = require('./Admin');
-const Testimonial = require('./Testimonial');
+const Testimonial = require('./Testimonial')(sequelize);
 
 // Modèles de liaison
 const BookingService = sequelize.define('BookingService', {
@@ -54,6 +54,26 @@ Service.belongsTo(Location, {
 Location.hasMany(Service, { 
   foreignKey: 'locationId',
   as: 'services'
+});
+
+// Testimonial -> Service (Many-to-One)
+Testimonial.belongsTo(Service, { 
+  foreignKey: 'serviceId',
+  as: 'service'
+});
+Service.hasMany(Testimonial, { 
+  foreignKey: 'serviceId',
+  as: 'testimonials'
+});
+
+// Testimonial -> Location (Many-to-One)
+Testimonial.belongsTo(Location, { 
+  foreignKey: 'locationId',
+  as: 'location'
+});
+Location.hasMany(Testimonial, { 
+  foreignKey: 'locationId',
+  as: 'testimonials'
 });
 
 module.exports = {
