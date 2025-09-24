@@ -1,0 +1,17 @@
+{
+  "name": "barbershop-backend",
+  "version": "1.0.0",
+  "description": "Barbershop Backend API",
+  "main": "Backend/server.js",
+  "scripts": {
+    "start": "cd Backend && npm start",
+    "install": "cd Backend && npm install",
+    "build": "cd Backend && npm install"
+  },
+  "engines": {
+    "node": ">=16.0.0"
+  },
+  "keywords": ["barbershop", "api", "nodejs"],
+  "author": "Emmanuel Kouame",
+  "license": "MIT"
+}
