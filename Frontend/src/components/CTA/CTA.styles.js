@@ -111,6 +111,7 @@ export const Button = styled(Link)`
   gap: 0.5rem;
   transition: all 0.3s ease;
   box-shadow: 0 8px 25px rgba(212, 175, 55, 0.3);
+  cursor: pointer;
   
   &:hover {
     transform: translateY(-3px);

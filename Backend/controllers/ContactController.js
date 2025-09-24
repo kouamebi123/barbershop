@@ -44,7 +44,7 @@ class ContactController extends BaseController {
 
       // Préparer l'email
       const mailOptions = {
-        from: process.env.EMAIL_FROM || 'noreply@barbershop-rennes.fr',
+        from: `"Barbershop Rennes" <${process.env.EMAIL_USER}>`,
         to: process.env.EMAIL_USER, // Email de réception
         subject: `[Contact Barbershop] ${subject}`,
         html: `

@@ -44,6 +44,7 @@ export const Logo = styled(Link)`
   font-weight: 700;
   font-size: 1.2rem;
   line-height: 1;
+  cursor: pointer;
   
   span:first-child {
     color: #d4af37;
@@ -81,6 +82,7 @@ export const NavLink = styled(Link).attrs(props => ({
   font-size: 1rem;
   position: relative;
   transition: all 0.3s ease;
+  cursor: pointer;
   
   &::after {
     content: '';
@@ -136,6 +138,7 @@ export const CTAButton = styled(Link)`
   text-transform: uppercase;
   letter-spacing: 1px;
   transition: all 0.3s ease;
+  cursor: pointer;
   
   &:hover {
     transform: translateY(-2px);

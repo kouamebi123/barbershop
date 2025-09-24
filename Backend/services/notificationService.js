@@ -34,24 +34,34 @@ class NotificationService {
 
   // Envoyer un email de confirmation de réservation
   async sendBookingConfirmation(booking) {
+    console.log('📧 [NotificationService] sendBookingConfirmation appelé');
+    console.log('📧 [NotificationService] Email transporter disponible:', !!this.emailTransporter);
+    console.log('📧 [NotificationService] EMAIL_ENABLED:', process.env.EMAIL_ENABLED);
+    
     if (!this.emailTransporter) {
-      console.warn('Service email non configuré');
+      console.warn('❌ Service email non configuré');
+      return false;
+    }
+
+    if (process.env.EMAIL_ENABLED !== 'true') {
+      console.warn('❌ EMAIL_ENABLED n\'est pas activé');
       return false;
     }
 
     try {
       const mailOptions = {
-        from: process.env.EMAIL_FROM || 'noreply@barbershop-rennes.fr',
+        from: `"Barbershop Rennes" <${process.env.EMAIL_USER}>`,
         to: booking.customerEmail,
         subject: `Confirmation de réservation - ${booking.bookingReference}`,
         html: this.generateBookingConfirmationHTML(booking)
       };
 
+      console.log('📧 [NotificationService] Envoi de l\'email vers:', booking.customerEmail);
       await this.emailTransporter.sendMail(mailOptions);
-      console.log(`Email de confirmation envoyé à ${booking.customerEmail}`);
+      console.log(`✅ Email de confirmation envoyé à ${booking.customerEmail}`);
       return true;
     } catch (error) {
-      console.error('Erreur lors de l\'envoi de l\'email:', error);
+      console.error('❌ Erreur lors de l\'envoi de l\'email:', error);
       return false;
     }
   }
@@ -65,7 +75,7 @@ class NotificationService {
 
     try {
       const mailOptions = {
-        from: process.env.EMAIL_FROM || 'noreply@barbershop-rennes.fr',
+        from: `"Barbershop Rennes" <${process.env.EMAIL_USER}>`,
         to: booking.customerEmail,
         subject: `Rappel - Votre rendez-vous demain`,
         html: this.generateBookingReminderHTML(booking)
@@ -137,7 +147,7 @@ class NotificationService {
 
     try {
       const mailOptions = {
-        from: process.env.EMAIL_FROM || 'noreply@barbershop-rennes.fr',
+        from: `"Barbershop Rennes" <${process.env.EMAIL_USER}>`,
         to: booking.customerEmail,
         subject: `Annulation de réservation - ${booking.bookingReference}`,
         html: this.generateBookingCancellationHTML(booking, reason)
@@ -154,7 +164,9 @@ class NotificationService {
 
   // Générer le HTML pour la confirmation de réservation
   generateBookingConfirmationHTML(booking) {
-    const services = booking.services.map(s => `${s.name} - ${s.price}€`).join('<br>');
+    const services = booking.services ? 
+      booking.services.map(s => `${s.name} - ${s.price}€`).join('<br>') : 
+      'Services non disponibles';
     
     return `
       <!DOCTYPE html>
@@ -187,9 +199,9 @@ class NotificationService {
               <p><strong>Date:</strong> ${booking.appointmentDate}</p>
               <p><strong>Heure:</strong> ${booking.appointmentTime}</p>
               <p><strong>Service:</strong> ${booking.services?.map(s => s.name).join(', ') || 'Service général'}</p>
-              <p><strong>Adresse:</strong> ${booking.location.name}<br>
-                 ${booking.location.address}<br>
-                 ${booking.location.city} ${booking.location.postalCode}</p>
+              <p><strong>Adresse:</strong> ${booking.location ? 
+                `${booking.location.name}<br>${booking.location.address}<br>${booking.location.city} ${booking.location.postalCode}` : 
+                'Adresse non disponible'}</p>
               <p><strong>Services:</strong><br>${services}</p>
               <p><strong>Durée totale:</strong> ${booking.duration} minutes</p>
               <p><strong>Prix total:</strong> ${booking.totalPrice}€</p>
@@ -209,7 +221,9 @@ class NotificationService {
 
   // Générer le HTML pour le rappel de réservation
   generateBookingReminderHTML(booking) {
-    const services = booking.services.map(s => `${s.name}`).join(', ');
+    const services = booking.services ? 
+      booking.services.map(s => `${s.name}`).join(', ') : 
+      'Services non disponibles';
     
     return `
       <!DOCTYPE html>

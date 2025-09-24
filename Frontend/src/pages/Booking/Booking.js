@@ -362,6 +362,7 @@ const Booking = () => {
                   key={service.id}
                   onClick={() => handleServiceSelect(service)}
                   $isSelected={formData.serviceIds.includes(service.id)}
+                  style={{ cursor: 'pointer' }}
                 >
                   <ServiceIcon>✂️</ServiceIcon>
                   <ServiceInfo>
@@ -384,6 +385,7 @@ const Booking = () => {
                   key={location.id}
                   onClick={() => handleLocationSelect(location)}
                   $isSelected={formData.locationId === location.id}
+                  style={{ cursor: 'pointer' }}
                 >
                   <LocationInfo>
                     <LocationName>{location.name}</LocationName>
@@ -447,7 +449,6 @@ const Booking = () => {
       case 6:
         return (
           <div>
-            <h3>Vos informations</h3>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '20px', marginTop: '20px' }}>
               <FormGroup>
                 <Label htmlFor="customerFirstName">Prénom</Label>
@@ -513,10 +514,11 @@ const Booking = () => {
       case 7:
         return (
           <div>
-            <h3>Récapitulatif de votre réservation</h3>
+            <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
             <p style={{ marginBottom: '20px', color: '#666', fontSize: '16px' }}>
               Veuillez vérifier les informations ci-dessous avant de confirmer votre réservation.
             </p>
+            </div>
             <SummaryCard>
               <SummaryItem>
                 <strong>Service:</strong> {selectedService?.name}

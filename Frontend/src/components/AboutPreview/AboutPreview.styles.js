@@ -118,6 +118,7 @@ export const Button = styled(Link)`
   gap: 0.5rem;
   transition: all 0.3s ease;
   align-self: flex-start;
+  cursor: pointer;
   
   &:hover {
     transform: translateY(-2px);

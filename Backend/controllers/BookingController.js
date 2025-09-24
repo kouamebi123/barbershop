@@ -2,7 +2,7 @@ const { Booking, Service, Location, Admin } = require('../models');
 const BaseController = require('./BaseController');
 const { Op } = require('sequelize');
 const { notificationService } = require('../services/notificationService');
-const { schedulerService } = require('../services/schedulerService');
+const schedulerService = require('../services/schedulerService');
 
 class BookingController extends BaseController {
   /**
@@ -208,11 +208,19 @@ class BookingController extends BaseController {
       // Associer les services
       await booking.setServices(services);
 
+      // Récupérer la réservation avec les services pour l'email
+      const bookingWithServices = await Booking.findByPk(booking.id, {
+        include: ['services']
+      });
+
       // Envoyer une notification immédiate
       try {
-        await schedulerService.sendImmediateNotification(booking);
+        console.log('📧 Tentative d\'envoi d\'email pour la réservation:', bookingWithServices.bookingReference);
+        console.log('📧 Email destinataire:', bookingWithServices.customerEmail);
+        const emailSent = await schedulerService.sendImmediateNotification(bookingWithServices);
+        console.log('📧 Résultat envoi email:', emailSent ? '✅ Succès' : '❌ Échec');
       } catch (notificationError) {
-        console.error('Erreur lors de l\'envoi de la notification:', notificationError);
+        console.error('❌ Erreur lors de l\'envoi de la notification:', notificationError);
       }
 
       return BaseController.success(res, booking, 'Réservation créée avec succès', 201);

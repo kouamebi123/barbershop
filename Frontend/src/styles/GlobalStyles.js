@@ -55,6 +55,12 @@ const GlobalStyles = createGlobalStyle`
     cursor: pointer;
     font-family: inherit;
   }
+  
+  /* Cursor pointer pour tous les éléments cliquables */
+  a, button, [role="button"], input[type="submit"], input[type="button"], 
+  .clickable, .btn, [onclick] {
+    cursor: pointer;
+  }
 
   input, textarea, select {
     font-family: inherit;
