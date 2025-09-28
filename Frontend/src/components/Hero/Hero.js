@@ -74,14 +74,15 @@ const Hero = () => {
             style={{ position: 'relative', zIndex: 3 }}
           >
             <HeroTitle>
-              <span>BARBERSHOP</span>
+              <span>MEILLEUR BARBERSHOP RENNES</span>
             </HeroTitle>
             <HeroSubtitle>
-              L'art de la coiffure moderne
+              Coupe homme, taille barbe & dégradé - Barber tendance Rennes
             </HeroSubtitle>
             <HeroDescription>
-              Découvrez une expérience de coiffure exceptionnelle avec nos maîtres barbiers. 
-              Services premium, ambiance moderne et réservation en ligne simple et rapide.
+              Découvrez le meilleur barbershop à Rennes spécialisé en coiffure homme stylé. 
+              Coupe dégradé, taille barbe, rasage traditionnel et soins barbe par nos maîtres barbiers. 
+              Réservation en ligne facile pour votre barber pas cher à Rennes.
             </HeroDescription>
           </motion.div>
 
@@ -141,8 +142,8 @@ const Hero = () => {
                 <source src="/home.mp4" type="video/mp4" />
               </video>
               <div className="image-content">
-                <h3>Votre Barbershop</h3>
-                <p>L'excellence de la coiffure</p>
+                <h3>Barber Hipster Rennes</h3>
+                <p>Coiffure homme tendance & Barber afro spécialisé</p>
               </div>
             </div>
           </motion.div>

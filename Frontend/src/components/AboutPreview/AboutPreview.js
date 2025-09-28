@@ -46,12 +46,12 @@ const AboutPreview = () => {
               transition={{ duration: 0.8 }}
               viewport={{ once: true }}
             >
-              <Title>À propos de nous</Title>
-              <Subtitle>L'excellence de la coiffure</Subtitle>
+              <Title>Meilleur Barbershop Rennes - À Propos</Title>
+              <Subtitle>L'excellence de la coiffure homme à Rennes</Subtitle>
               <Description>
-                Depuis plusieurs années, notre barbershop s'impose comme la référence de la coiffure. 
-                Notre équipe de maîtres barbiers passionnés vous offre une expérience 
-                unique alliant tradition et modernité.
+                Depuis plusieurs années, notre barbershop s'impose comme le meilleur barbershop à Rennes. 
+                Spécialisés en coupe homme, taille barbe et dégradé, notre équipe de maîtres barbiers passionnés 
+                vous offre une expérience unique alliant tradition et modernité dans notre salon tendance.
               </Description>
               
               <Features>
@@ -79,8 +79,8 @@ const AboutPreview = () => {
             >
               <div className="about-image-placeholder">
                 <div className="image-content">
-                  <h3>Notre équipe</h3>
-                  <p>Des professionnels passionnés</p>
+                  <h3>Barber Tendance Rennes</h3>
+                  <p>Équipe spécialisée coiffure homme stylé</p>
                 </div>
               </div>
             </motion.div>

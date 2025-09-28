@@ -8,6 +8,9 @@ import AboutPreview from '../../components/AboutPreview/AboutPreview';
 import LocationsPreview from '../../components/LocationsPreview/LocationsPreview';
 import Testimonials from '../../components/Testimonials/Testimonials';
 import CTA from '../../components/CTA/CTA';
+import SEOContent from '../../components/SEOContent/SEOContent';
+import InternalLinks from '../../components/InternalLinks/InternalLinks';
+import StructuredData from '../../components/StructuredData/StructuredData';
 
 import { FEATURES, STATS, VALUES } from '../../constants';
 
@@ -39,6 +42,7 @@ const Home = () => {
 
   return (
     <HomeContainer>
+      <StructuredData type="business" />
       <Hero />
       
       <Section>
@@ -109,6 +113,8 @@ const Home = () => {
       <AboutPreview />
       <LocationsPreview />
       <Testimonials />
+      <SEOContent />
+      <InternalLinks />
       <CTA />
     </HomeContainer>
   );

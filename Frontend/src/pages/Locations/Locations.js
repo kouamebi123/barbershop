@@ -114,9 +114,9 @@ const Locations = () => {
   return (
     <LocationsContainer>
       <Helmet>
-        <title>Nos Salons - Votre Barbershop</title>
-        <meta name="description" content="Découvrez nos différents salons. Emplacements, horaires, services et informations pratiques pour chaque salon." />
-        <meta name="keywords" content="salons, barbershop, adresses, horaires, emplacements, parking" />
+        <title>Barbershop Rennes Centre & Sud | Où Nous Trouver</title>
+        <meta name="description" content="Barbershop Rennes centre-ville et sud. Barber proche gare Rennes, parking gratuit, réservation en ligne. Adresses et horaires des salons." />
+        <meta name="keywords" content="barbershop rennes centre, barbershop rennes sud, barber proche gare rennes, barber rennes centre-ville, salon coiffeur rennes, adresse barbershop rennes, horaires barbershop rennes" />
       </Helmet>
 
       {/* Hero Section */}
@@ -127,9 +127,9 @@ const Locations = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <HeroTitle>Nos Salons</HeroTitle>
+            <HeroTitle>Barbershop Rennes - Nos Salons</HeroTitle>
             <HeroSubtitle>
-              Retrouvez-nous dans nos différents emplacements
+              Barber proche gare Rennes et centre-ville. Trouvez un bon barbershop à Rennes avec réservation en ligne
             </HeroSubtitle>
           </motion.div>
         </HeroContent>

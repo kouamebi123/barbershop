@@ -90,9 +90,9 @@ const Services = () => {
   return (
     <ServicesContainer>
       <Helmet>
-        <title>Services - Votre Barbershop</title>
-        <meta name="description" content="Découvrez nos services de coiffure, taille de barbe et soins du visage. Qualité premium, prix compétitifs." />
-        <meta name="keywords" content="coiffure, barbe, soins, rasage, barbershop" />
+        <title>Services Barbershop Rennes | Coupe Homme, Taille Barbe & Soins</title>
+        <meta name="description" content="Services barbershop à Rennes : coupe homme, taille barbe, coupe dégradé, rasage traditionnel, soins barbe. Barber tendance avec réservation en ligne." />
+        <meta name="keywords" content="services barbershop rennes, coupe homme rennes, taille barbe rennes, coupe dégradé rennes, rasage traditionnel rennes, soin barbe rennes, entretien barbe rennes, coupe cheveux barbe rennes, barber tendance rennes, coiffure homme tendance rennes" />
       </Helmet>
 
       {/* Hero Section */}
@@ -103,10 +103,10 @@ const Services = () => {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.8 }}
           >
-            <HeroTitle>Nos Services</HeroTitle>
+            <HeroTitle>Services Barbershop Rennes</HeroTitle>
             <HeroSubtitle>
-              Découvrez notre gamme complète de services de coiffure et de soins, 
-              réalisés par des professionnels expérimentés
+              Coupe homme, taille barbe, dégradé et rasage traditionnel à Rennes. 
+              Barber tendance spécialisé en coiffure homme stylé et soins barbe professionnels.
             </HeroSubtitle>
           </motion.div>
         </HeroContent>
